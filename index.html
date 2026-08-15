@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CC and TT's Timetable - August 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Nunito', 'Quicksand', sans-serif; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  .cal-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .cal-grid-wrap { min-width: 700px; }
+  @media (max-width: 768px) {
+    .action-btns { gap: 6px !important; }
+    .action-btns button { padding: 8px 12px !important; font-size: 11px !important; }
+    .month-btns button { padding: 8px 18px !important; font-size: 13px !important; }
+  }
+</style>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDsPBERiInmhvILwG4nBFVjtB3nooaIEMo",
+    authDomain: "cc-tt-timetable.firebaseapp.com",
+    databaseURL: "https://cc-tt-timetable-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "cc-tt-timetable",
+    storageBucket: "cc-tt-timetable.firebasestorage.app",
+    messagingSenderId: "380578094906",
+    appId: "1:380578094906:web:4cb96637c3cc864a19ba03"
+  };
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+</script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const MONTHS = [
+  { name: "August 2026", year: 2026, month: 7 },
+  { name: "September 2026", year: 2026, month: 8 },
+  { name: "October 2026", year: 2026, month: 9 },
+];
+const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const INITIAL_EVENTS = {
+  "2026-08-01": [
+    { label: "TT Littlehab", time: "8:45 AM", color: "#2196F3" },
+    { label: "Bear Music", time: "11:15 AM", color: "#FFD700" },
+    { label: "DBS Open Day", time: "All Day", color: "#FF6B6B" },
+  ],
+  "2026-08-03": [{ label: "Painting Comp Class", time: "10:00 AM – 12:00 PM", color: "#9B59B6" }],
+  "2026-08-04": [{ label: "Art Class", time: "10:00 AM", color: "#85CDCA" }],
+  "2026-08-05": [{ label: "Jollykingdom", time: "10:00 AM", color: "#D4A5FF" }],
+  "2026-08-06": [
+    { label: "Taekwondo", time: "10:00 – 10:40 AM", color: "#87CEEB" },
+    { label: "First Little Steps", time: "2:00 PM – 5:00 PM", color: "#FF8C42" },
+  ],
+  "2026-08-07": [{ label: "First Little Steps", time: "9:30 AM – 12:30 PM", color: "#FF8C42" }],
+  "2026-08-08": [
+    { label: "TT Littlehab", time: "8:45 AM", color: "#2196F3" },
+    { label: "Bear Music", time: "11:15 AM", color: "#FFD700" },
+  ],
+  "2026-08-09": [{ label: "LCK", time: "3:15 PM – 4:45 PM", color: "#E91E63" }],
+  "2026-08-11": [
+    { label: "Art Class", time: "10:00 AM", color: "#85CDCA" },
+    { label: "First Little Steps", time: "2:00 PM – 5:00 PM", color: "#FF8C42" },
+  ],
+  "2026-08-12": [{ label: "Jollykingdom", time: "10:00 AM", color: "#D4A5FF" }],
+  "2026-08-13": [
+    { label: "Taekwondo", time: "10:00 – 10:40 AM", color: "#87CEEB" },
+    { label: "First Little Steps", time: "2:00 PM – 5:00 PM", color: "#FF8C42" },
+  ],
+  "2026-08-15": [
+    { label: "TT Littlehab", time: "8:45 AM", color: "#2196F3" },
+    { label: "Bear Music", time: "11:15 AM", color: "#FFD700" },
+  ],
+  "2026-08-18": [
+    { label: "Art Class", time: "10:00 AM", color: "#85CDCA" },
+    { label: "Taekwondo", time: "5:00 PM", color: "#87CEEB" },
+  ],
+  "2026-08-19": [
+    { label: "Jollykingdom", time: "10:00 AM", color: "#D4A5FF" },
+    { label: "First Little Steps", time: "2:00 PM – 5:00 PM", color: "#FF8C42" },
+  ],
+  "2026-08-20": [{ label: "Taekwondo", time: "10:00 – 10:40 AM", color: "#87CEEB" }],
+  "2026-08-21": [{ label: "First Little Steps", time: "9:30 AM – 12:30 PM", color: "#FF8C42" }],
+  "2026-08-22": [
+    { label: "TT Littlehab", time: "8:45 AM", color: "#2196F3" },
+    { label: "Bear Music", time: "11:15 AM", color: "#FFD700" },
+  ],
+  "2026-08-23": [{ label: "LCK Dress Rehearsal", time: "1:30 PM – 3:30 PM", color: "#E91E63" }],
+  "2026-08-25": [{ label: "Art Class", time: "10:00 AM", color: "#85CDCA" }],
+  "2026-08-26": [
+    { label: "Jollykingdom", time: "10:00 AM", color: "#D4A5FF" },
+    { label: "Shatin Final Rehearsal", time: "10:30 AM – 12:30 PM", color: "#E91E63" },
+  ],
+  "2026-08-27": [{ label: "Taekwondo", time: "10:00 – 10:40 AM", color: "#87CEEB" }],
+  "2026-08-29": [
+    { label: "TT Littlehab", time: "8:45 AM", color: "#2196F3" },
+    { label: "Bear Music", time: "11:15 AM", color: "#FFD700" },
+  ],
+};
+
+const HOLIDAY_START = new Date(2026, 6, 16);
+const HOLIDAY_END = new Date(2026, 7, 25);
+const PUBLIC_HOLIDAYS = ["2026-07-01"];
+
+function isHoliday(date) { return date >= HOLIDAY_START && date <= HOLIDAY_END; }
+function isPublicHoliday(date) {
+  const k = date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");
+  return PUBLIC_HOLIDAYS.includes(k);
+}
+function getKey(date) {
+  return date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");
+}
+function parseTime(timeStr) {
+  if (!timeStr || timeStr === "All Day" || timeStr === "TBC") return null;
+  const clean = timeStr.replace(/\u2013/g, "-").replace(/–/g, "-");
+  const parts = clean.split("-").map(s => s.trim());
+  const toMin = (t) => {
+    const m = t.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+    if (!m) return null;
+    let h = parseInt(m[1]); const mn = parseInt(m[2]); const ap = m[3].toUpperCase();
+    if (ap === "PM" && h !== 12) h += 12; if (ap === "AM" && h === 12) h = 0;
+    return h * 60 + mn;
+  };
+  if (parts.length === 2) return { start: toMin(parts[0]), end: toMin(parts[1]) };
+  const s = toMin(parts[0]);
+  return s !== null ? { start: s, end: s + 60 } : null;
+}
+function hasClash(events) {
+  if (!events || events.length < 2) return false;
+  const hasAllDay = events.some(e => e.time === "All Day");
+  const nonAll = events.filter(e => e.time !== "All Day" && e.time !== "TBC");
+  if (hasAllDay && nonAll.length > 0) return true;
+  const parsed = nonAll.map(e => parseTime(e.time)).filter(p => p && p.start !== null && p.end !== null);
+  for (let i = 0; i < parsed.length; i++)
+    for (let j = i+1; j < parsed.length; j++)
+      if (parsed[i].start < parsed[j].end && parsed[j].start < parsed[i].end) return true;
+  return false;
+}
+function getCalendarDays(year, month) {
+  let startDay = new Date(year, month, 1).getDay();
+  const days = [];
+  for (let i = 0; i < startDay; i++) days.push(null);
+  const last = new Date(year, month + 1, 0).getDate();
+  for (let d = 1; d <= last; d++) days.push(new Date(year, month, d));
+  return days;
+}
+
+const COLOR_OPTIONS = [
+  { name: "Red", hex: "#FF6B6B" }, { name: "Orange", hex: "#FF8C42" },
+  { name: "Yellow", hex: "#FFD700" }, { name: "Gold", hex: "#FFD93D" },
+  { name: "Green", hex: "#4CAF50" }, { name: "Teal", hex: "#85CDCA" },
+  { name: "Light Blue", hex: "#87CEEB" }, { name: "Blue", hex: "#2196F3" },
+  { name: "Purple", hex: "#9B59B6" }, { name: "Lavender", hex: "#D4A5FF" },
+  { name: "Pink", hex: "#E91E63" }, { name: "Brown", hex: "#8D6E63" },
+];
+const DAY_OPTIONS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+
+const btnBase = { border:"none", borderRadius:10, fontFamily:"'Nunito',sans-serif", fontWeight:700, cursor:"pointer", transition:"all 0.2s ease" };
+const inputStyle = { width:"100%", padding:"10px 12px", borderRadius:8, border:"1.5px solid #E0E0E0", fontFamily:"'Nunito',sans-serif", fontSize:14, fontWeight:600, outline:"none", boxSizing:"border-box" };
+const labelStyle = { fontSize:12, fontWeight:700, color:"#636E72", marginBottom:4, display:"block" };
+
+function Modal({ title, onClose, children }) {
+  return React.createElement("div", { style: { position:"fixed",top:0,left:0,right:0,bottom:0,background:"rgba(0,0,0,0.4)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:1000,padding:16 }, onClick: onClose },
+    React.createElement("div", { style: { background:"#fff",borderRadius:20,padding:"24px 28px",maxWidth:480,width:"100%",boxShadow:"0 20px 60px rgba(0,0,0,0.15)",maxHeight:"85vh",overflowY:"auto" }, onClick: e => e.stopPropagation() },
+      React.createElement("div", { style: { display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20 } },
+        React.createElement("h3", { style: { margin:0,fontSize:18,fontWeight:800,color:"#2D3436",fontFamily:"'Nunito',sans-serif" } }, title),
+        React.createElement("button", { onClick: onClose, style: { ...btnBase, background:"#F0F0F0", padding:"6px 12px", fontSize:16 } }, "✕")
+      ),
+      children
+    )
+  );
+}
+
+function parseTextToEvents(text) {
+  const MONTH_MAP = { jan:1,january:1,feb:2,february:2,mar:3,march:3,apr:4,april:4,may:5,jun:6,june:6,jul:7,july:7,aug:8,august:8,sep:9,september:9,oct:10,october:10,nov:11,november:11,dec:12,december:12 };
+  const COLORS = ["#2196F3","#4CAF50","#FF8C42","#87CEEB","#9B59B6","#E91E63","#85CDCA","#D4A5FF","#FFD700","#FF6B6B","#8D6E63","#FFD93D"];
+  let colorIdx = 0;
+  const pickColor = () => COLORS[colorIdx++ % COLORS.length];
+
+  function to12h(h, m) {
+    const mm = String(m).padStart(2,"0");
+    if (h === 0) return "12:"+mm+" AM";
+    if (h < 12) return h+":"+mm+" AM";
+    if (h === 12) return "12:"+mm+" PM";
+    return (h-12)+":"+mm+" PM";
+  }
+
+  function parseTimeStr(s) {
+    s = s.replace(/\s+/g," ").trim();
+    // 24h: 14:00, 9:30
+    let m = s.match(/^(\d{1,2}):(\d{2})$/);
+    if (m) { return to12h(parseInt(m[1]), parseInt(m[2])); }
+    // 12h: 2pm, 10am, 2:30pm
+    m = s.match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)$/i);
+    if (m) {
+      let h = parseInt(m[1]); const mn = parseInt(m[2]||"0"); const ap = m[3].toUpperCase();
+      if (ap === "PM" && h !== 12) h += 12; if (ap === "AM" && h === 12) h = 0;
+      return to12h(h, mn);
+    }
+    return null;
+  }
+
+  function parseTimeRange(s) {
+    s = s.replace(/\u2013/g,"-").replace(/–/g,"-").replace(/to/gi,"-").trim();
+    const parts = s.split(/\s*-\s*/);
+    if (parts.length === 2) {
+      // If second part has am/pm but first doesn't, infer
+      let t1 = parseTimeStr(parts[0]);
+      let t2 = parseTimeStr(parts[1]);
+      if (!t1 && t2) {
+        const ampm = parts[1].match(/(am|pm)/i);
+        if (ampm) t1 = parseTimeStr(parts[0] + ampm[1]);
+      }
+      if (t1 && t2) return t1 + " – " + t2;
+      if (t1) return t1;
+    }
+    const single = parseTimeStr(s);
+    if (single) return single;
+    return null;
+  }
+
+  function parseDate(s) {
+    s = s.replace(/\s+/g," ").trim();
+    // DD/MM/YYYY or DD-MM-YYYY or DD.MM.YYYY
+    let m = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/);
+    if (m) return { day: parseInt(m[1]), month: parseInt(m[2]), year: parseInt(m[3]) };
+    // DD/MM or DD-MM or DD.MM
+    m = s.match(/^(\d{1,2})[\/\-.](\d{1,2})$/);
+    if (m) return { day: parseInt(m[1]), month: parseInt(m[2]), year: 2026 };
+    // DD Mon or DDMon or DD Month
+    m = s.match(/^(\d{1,2})\s*([a-zA-Z]+)$/);
+    if (m) { const mo = MONTH_MAP[m[2].toLowerCase()]; if (mo) return { day: parseInt(m[1]), month: mo, year: 2026 }; }
+    // Mon DD or Month DD
+    m = s.match(/^([a-zA-Z]+)\s+(\d{1,2})$/);
+    if (m) { const mo = MONTH_MAP[m[1].toLowerCase()]; if (mo) return { day: parseInt(m[2]), month: mo, year: 2026 }; }
+    // DDst/nd/rd/th Mon
+    m = s.match(/^(\d{1,2})(?:st|nd|rd|th)?\s+([a-zA-Z]+)$/);
+    if (m) { const mo = MONTH_MAP[m[2].toLowerCase()]; if (mo) return { day: parseInt(m[1]), month: mo, year: 2026 }; }
+    // Mon DDst/nd/rd/th
+    m = s.match(/^([a-zA-Z]+)\s+(\d{1,2})(?:st|nd|rd|th)?$/);
+    if (m) { const mo = MONTH_MAP[m[1].toLowerCase()]; if (mo) return { day: parseInt(m[2]), month: mo, year: 2026 }; }
+    return null;
+  }
+
+  function toKey(d) {
+    return d.year+"-"+String(d.month).padStart(2,"0")+"-"+String(d.day).padStart(2,"0");
+  }
+
+  const results = [];
+  const lines = text.split(/\n/).map(l => l.trim()).filter(l => l.length > 0);
+
+  for (const line of lines) {
+    // Try to find dates in the line
+    // Pattern: date, time-range, label (flexible order)
+    let remaining = line;
+    let foundDates = [];
+    let foundTime = null;
+    let label = "";
+
+    // Extract date patterns: DD/MM, DD/MM/YYYY, DD Mon, Mon DD, etc.
+    const datePatterns = [
+      /(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/g,
+      /(\d{1,2}[\/\-\.]\d{1,2})(?!\d)/g,
+      /(\d{1,2}(?:st|nd|rd|th)?\s+(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?))/gi,
+      /((?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+\d{1,2}(?:st|nd|rd|th)?)/gi,
+    ];
+
+    for (const pat of datePatterns) {
+      let dm;
+      while ((dm = pat.exec(remaining)) !== null) {
+        const parsed = parseDate(dm[1]);
+        if (parsed) foundDates.push({ parsed, raw: dm[0], idx: dm.index });
+      }
+    }
+
+    // Extract time patterns
+    const timePatterns = [
+      /(\d{1,2}(?::\d{2})?\s*(?:am|pm)\s*(?:[-–\u2013]|to)\s*\d{1,2}(?::\d{2})?\s*(?:am|pm))/gi,
+      /(\d{1,2}:\d{2}\s*(?:[-–\u2013]|to)\s*\d{1,2}:\d{2})/g,
+      /(\d{1,2}(?::\d{2})?\s*(?:am|pm))/gi,
+      /(\d{1,2}:\d{2})(?!\d)/g,
+    ];
+
+    for (const pat of timePatterns) {
+      if (foundTime) break;
+      let tm;
+      while ((tm = pat.exec(remaining)) !== null) {
+        const parsed = parseTimeRange(tm[1]);
+        if (parsed) { foundTime = { parsed, raw: tm[0] }; break; }
+      }
+    }
+
+    // Build label from what's left
+    let cleanLine = line;
+    if (foundTime) cleanLine = cleanLine.replace(foundTime.raw, " ");
+    for (const fd of foundDates) cleanLine = cleanLine.replace(fd.raw, " ");
+    // Clean up separators and extra whitespace
+    label = cleanLine.replace(/^[\s,\-–:;|()\[\]]+|[\s,\-–:;|()\[\]]+$/g, "").replace(/\s+/g," ").trim();
+    // Remove day names
+    label = label.replace(/\b(mon(?:day)?|tue(?:sday)?|wed(?:nesday)?|thu(?:rsday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)\b/gi, "").replace(/\s+/g," ").trim();
+    label = label.replace(/^[\s,\-–:;|()\[\]]+|[\s,\-–:;|()\[\]]+$/g, "").trim();
+
+    if (foundDates.length > 0 && (foundTime || label)) {
+      const color = pickColor();
+      for (const fd of foundDates) {
+        results.push({
+          date: toKey(fd.parsed),
+          label: label || "Event",
+          time: foundTime ? foundTime.parsed : "All Day",
+          color,
+        });
+      }
+    }
+  }
+  return results;
+}
+
+function CCCalendar() {
+  const [activeMonth, setActiveMonth] = useState(0);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [events, setEvents] = useState(INITIAL_EVENTS);
+  const [showAddEvent, setShowAddEvent] = useState(false);
+  const [showRecurring, setShowRecurring] = useState(false);
+  const [showLabels, setShowLabels] = useState(false);
+  const [showPaste, setShowPaste] = useState(false);
+  const [hasUnsaved, setHasUnsaved] = useState(false);
+  const [saveStatus, setSaveStatus] = useState("");
+  const [loadStatus, setLoadStatus] = useState("loading");
+  const [dragInfo, setDragInfo] = useState(null);
+  const [dropTarget, setDropTarget] = useState(null);
+  const [editInfo, setEditInfo] = useState(null);
+  const [editLabel, setEditLabel] = useState("");
+  const [editTime, setEditTime] = useState("");
+  const [editColor, setEditColor] = useState("#2196F3");
+  const [newLabel, setNewLabel] = useState("");
+  const [newDate, setNewDate] = useState("");
+  const [newTime, setNewTime] = useState("");
+  const [newColor, setNewColor] = useState("#2196F3");
+  const [recLabel, setRecLabel] = useState("");
+  const [recDay, setRecDay] = useState("Monday");
+  const [recTime, setRecTime] = useState("");
+  const [recColor, setRecColor] = useState("#4CAF50");
+  const [recFrom, setRecFrom] = useState("2026-08-01");
+  const [recTo, setRecTo] = useState("2026-08-31");
+
+  // Paste & Parse states
+  const [pasteText, setPasteText] = useState("");
+  const [parsing, setParsing] = useState(false);
+  const [parsedEvents, setParsedEvents] = useState(null);
+  const [parseError, setParseError] = useState("");
+
+  useEffect(() => {
+    const ref = db.ref("events");
+    ref.on("value", (snapshot) => {
+      const data = snapshot.val();
+      if (data) setEvents(data); else ref.set(INITIAL_EVENTS);
+      setLoadStatus("loaded"); setHasUnsaved(false);
+    }, () => setLoadStatus("error"));
+    return () => ref.off();
+  }, []);
+
+  const updateEvents = (ne) => { setEvents(ne); setHasUnsaved(true); setSaveStatus(""); };
+  const saveChanges = () => {
+    setSaveStatus("saving");
+    db.ref("events").set(events)
+      .then(() => { setHasUnsaved(false); setSaveStatus("saved"); setTimeout(() => setSaveStatus(""), 2500); })
+      .catch(() => { setSaveStatus("error"); setTimeout(() => setSaveStatus(""), 3000); });
+  };
+
+  const current = MONTHS[activeMonth];
+  const days = getCalendarDays(current.year, current.month);
+  const selectedKey = selectedDate ? getKey(selectedDate) : null;
+
+  const addEvent = () => {
+    if (!newLabel || !newDate || !newTime) return;
+    const updated = { ...events };
+    if (!updated[newDate]) updated[newDate] = [];
+    updated[newDate] = [...updated[newDate], { label: newLabel, time: newTime, color: newColor }];
+    updateEvents(updated);
+    setNewLabel(""); setNewDate(""); setNewTime(""); setNewColor("#2196F3"); setShowAddEvent(false);
+  };
+  const addRecurring = () => {
+    if (!recLabel || !recTime) return;
+    const dayIdx = DAY_OPTIONS.indexOf(recDay);
+    const jsDayIdx = dayIdx === 6 ? 0 : dayIdx + 1;
+    const updated = { ...events };
+    const start = new Date(recFrom+"T00:00:00"); const end = new Date(recTo+"T00:00:00");
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate()+1)) {
+      if (d.getDay() === jsDayIdx) { const key = getKey(d); if (!updated[key]) updated[key] = []; updated[key] = [...updated[key], { label: recLabel, time: recTime, color: recColor }]; }
+    }
+    updateEvents(updated); setRecLabel(""); setRecTime(""); setRecColor("#4CAF50"); setShowRecurring(false);
+  };
+
+  const allLabels = {};
+  Object.values(events).forEach(evList => evList.forEach(ev => { allLabels[ev.label] = ev.color; }));
+  const updateLabelColor = (label, newHex) => {
+    const updated = {}; Object.entries(events).forEach(([k, v]) => { updated[k] = v.map(ev => ev.label === label ? { ...ev, color: newHex } : ev); }); updateEvents(updated);
+  };
+
+  const handleDragStart = (e, dateKey, evIdx) => { setDragInfo({ dateKey, evIdx }); e.dataTransfer.effectAllowed = "move"; e.dataTransfer.setData("text/plain", ""); };
+  const handleDragOver = (e, dateKey) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; setDropTarget(dateKey); };
+  const handleDragLeave = () => { setDropTarget(null); };
+  const handleDrop = (e, targetKey) => {
+    e.preventDefault(); setDropTarget(null);
+    if (!dragInfo || dragInfo.dateKey === targetKey) { setDragInfo(null); return; }
+    const updated = { ...events }; const srcList = [...(updated[dragInfo.dateKey] || [])]; const movedEvent = srcList[dragInfo.evIdx];
+    if (!movedEvent) { setDragInfo(null); return; }
+    srcList.splice(dragInfo.evIdx, 1);
+    if (srcList.length === 0) delete updated[dragInfo.dateKey]; else updated[dragInfo.dateKey] = srcList;
+    if (!updated[targetKey]) updated[targetKey] = []; updated[targetKey] = [...updated[targetKey], movedEvent];
+    updateEvents(updated); setDragInfo(null);
+  };
+  const handleDragEnd = () => { setDragInfo(null); setDropTarget(null); };
+
+  const openEditEvent = (dateKey, evIdx) => { const ev = events[dateKey]?.[evIdx]; if (!ev) return; setEditInfo({ dateKey, evIdx }); setEditLabel(ev.label); setEditTime(ev.time); setEditColor(ev.color); };
+  const saveEditEvent = () => {
+    if (!editInfo || !editLabel || !editTime) return;
+    const updated = { ...events }; const list = [...(updated[editInfo.dateKey] || [])];
+    list[editInfo.evIdx] = { label: editLabel, time: editTime, color: editColor }; updated[editInfo.dateKey] = list;
+    updateEvents(updated); setEditInfo(null);
+  };
+  const deleteEditEvent = () => {
+    if (!editInfo) return;
+    const updated = { ...events }; const list = [...(updated[editInfo.dateKey] || [])]; list.splice(editInfo.evIdx, 1);
+    if (list.length === 0) delete updated[editInfo.dateKey]; else updated[editInfo.dateKey] = list;
+    updateEvents(updated); setEditInfo(null);
+  };
+
+  // Parse handler
+  const handleParse = () => {
+    if (!pasteText.trim()) return;
+    setParsing(true); setParseError(""); setParsedEvents(null);
+    try {
+      const result = parseTextToEvents(pasteText);
+      if (result.length === 0) { setParseError("No events found. Try one event per line, e.g.: 20/08 2pm-4pm Swimming"); }
+      else { setParsedEvents(result); }
+    } catch (e) {
+      setParseError("Could not parse the text. Try a clearer format.");
+    }
+    setParsing(false);
+  };
+
+  const confirmParsed = () => {
+    if (!parsedEvents) return;
+    const updated = { ...events };
+    parsedEvents.forEach(ev => {
+      if (!updated[ev.date]) updated[ev.date] = [];
+      updated[ev.date] = [...updated[ev.date], { label: ev.label, time: ev.time, color: ev.color || "#2196F3" }];
+    });
+    updateEvents(updated);
+    setPasteText(""); setParsedEvents(null); setShowPaste(false);
+  };
+
+  const removeParsedEvent = (idx) => {
+    setParsedEvents(prev => prev.filter((_, i) => i !== idx));
+  };
+
+  if (loadStatus === "loading") {
+    return <div style={{ fontFamily:"'Nunito',sans-serif", display:"flex", alignItems:"center", justifyContent:"center", minHeight:"100vh", background:"linear-gradient(135deg, #FFF8E7 0%, #FFF0D4 50%, #E8F4FD 100%)" }}>
+      <div style={{ textAlign:"center" }}><div style={{ fontSize:32, marginBottom:12 }}>☀️</div><div style={{ fontSize:16, fontWeight:700, color:"#636E72" }}>Loading calendar...</div></div>
+    </div>;
+  }
+
+  return (
+    <div style={{ fontFamily:"'Nunito','Quicksand',sans-serif", background:"linear-gradient(135deg, #FFF8E7 0%, #FFF0D4 50%, #E8F4FD 100%)", minHeight:"100vh", padding:"24px 16px", boxSizing:"border-box" }}>
+      <div style={{ maxWidth:1100, margin:"0 auto" }}>
+        <div style={{ textAlign:"center", marginBottom:20 }}>
+          <div style={{ fontSize:14, fontWeight:700, letterSpacing:3, textTransform:"uppercase", color:"#B8860B", marginBottom:4, fontFamily:"'Quicksand',sans-serif" }}>Summer 2026</div>
+          <h1 style={{ fontSize:28, fontWeight:800, color:"#2D3436", margin:"0 0 6px 0", fontFamily:"'Nunito',sans-serif" }}>CC and TT's Timetable ☀️</h1>
+        </div>
+
+        <div className="action-btns" style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:8, marginBottom:20 }}>
+          <button onClick={() => setShowAddEvent(true)} style={{ ...btnBase, background:"linear-gradient(135deg, #0984E3, #74B9FF)", color:"#fff", padding:"10px 20px", fontSize:13, boxShadow:"0 3px 10px rgba(9,132,227,0.3)" }}>+ Add Event</button>
+          <button onClick={() => setShowRecurring(true)} style={{ ...btnBase, background:"linear-gradient(135deg, #00B894, #55EFC4)", color:"#fff", padding:"10px 20px", fontSize:13, boxShadow:"0 3px 10px rgba(0,184,148,0.3)" }}>🔄 Recurring</button>
+          <button onClick={() => { setShowPaste(true); setParsedEvents(null); setParseError(""); }} style={{ ...btnBase, background:"linear-gradient(135deg, #FDCB6E, #F39C12)", color:"#fff", padding:"10px 20px", fontSize:13, boxShadow:"0 3px 10px rgba(243,156,18,0.3)" }}>📋 Paste & Parse</button>
+          <button onClick={saveChanges} style={{ ...btnBase, padding:"10px 20px", fontSize:13, background: hasUnsaved ? "linear-gradient(135deg, #E74C3C, #FF6B6B)" : "linear-gradient(135deg, #B2BEC3, #DFE6E9)", color:"#fff", boxShadow: hasUnsaved ? "0 3px 10px rgba(231,76,60,0.3)" : "none", animation: hasUnsaved ? "pulse 2s infinite" : "none" }}>
+            {saveStatus === "saving" ? "⏳ Saving..." : saveStatus === "saved" ? "✓ Synced!" : saveStatus === "error" ? "✕ Error" : hasUnsaved ? "☁️ Save to Cloud" : "☁️ Synced"}
+          </button>
+        </div>
+
+        <div className="month-btns" style={{ display:"flex", justifyContent:"center", gap:8, marginBottom:24 }}>
+          {MONTHS.map((m, i) => (
+            <button key={m.name} onClick={() => { setActiveMonth(i); setSelectedDate(null); }}
+              style={{ ...btnBase, padding:"10px 28px", fontSize:15,
+                background: activeMonth === i ? "linear-gradient(135deg, #FF9A56, #FF6B6B)" : "#fff",
+                color: activeMonth === i ? "#fff" : "#636E72",
+                boxShadow: activeMonth === i ? "0 4px 15px rgba(255,107,107,0.35)" : "0 2px 8px rgba(0,0,0,0.06)",
+              }}>
+              {m.name}
+            </button>
+          ))}
+        </div>
+
+        <div className="cal-scroll" style={{ background:"#fff", borderRadius:20, padding:20, boxShadow:"0 8px 30px rgba(0,0,0,0.07)" }}>
+          <div className="cal-grid-wrap">
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(7, 1fr)", gap:4 }}>
+            {DAYS.map(d => (
+              <div key={d} style={{ textAlign:"center", fontSize:12, fontWeight:700, color: d==="Sat"||d==="Sun" ? "#E17055" : "#B2BEC3", padding:"6px 0", fontFamily:"'Quicksand',sans-serif", textTransform:"uppercase", letterSpacing:1 }}>{d}</div>
+            ))}
+            {days.map((date, idx) => {
+              if (!date) return <div key={"e-"+idx} style={{ minHeight:110 }} />;
+              const key = getKey(date);
+              const evs = events[key] || [];
+              const holiday = isHoliday(date);
+              const isWknd = date.getDay() === 0 || date.getDay() === 6;
+              const isSel = selectedKey === key;
+              const ph = isPublicHoliday(date);
+              const clash = hasClash(evs);
+              const today = new Date(); today.setHours(0,0,0,0);
+              const isPast = date < today;
+              const isToday = date.getTime() === today.getTime();
+              return (
+                <div key={key}
+                  onClick={() => setSelectedDate(isSel ? null : date)}
+                  onDoubleClick={() => { setNewDate(key); setShowAddEvent(true); }}
+                  onDragOver={e => handleDragOver(e, key)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={e => handleDrop(e, key)}
+                  style={{
+                    minHeight:110, borderRadius:12, padding:"6px 3px", cursor:"pointer",
+                    transition:"all 0.2s ease", overflow:"hidden",
+                    border: isToday ? "2px solid #E74C3C" : dropTarget===key ? "2px dashed #0984E3" : isSel ? "2px solid #FF6B6B" : "2px solid transparent",
+                    background: isPast ? "#F0F0F0" : dropTarget===key ? "#E3F2FD" : ph ? "#E8F5E9" : holiday ? "linear-gradient(135deg, #FFF8E1, #FFF3D6)" : isWknd ? "#FAFAFA" : "#fff",
+                    position:"relative", opacity: isPast ? 0.5 : 1,
+                  }}>
+                  {clash && !isPast && <div style={{ position:"absolute", top:3, right:5, fontSize:10, color:"#E74C3C", fontWeight:800 }}>⭐</div>}
+                  <div style={{ fontSize:14, fontWeight:700, color: isPast ? "#B0B0B0" : isWknd ? "#E17055" : "#2D3436", textAlign:"center", marginBottom:4 }}>{date.getDate()}</div>
+                  {ph && <div style={{ fontSize:8, fontWeight:700, color: isPast?"#B0B0B0":"#2E7D32", textAlign:"center", letterSpacing:0.5, marginBottom:2 }}>PH</div>}
+                  <div style={{ display:"flex", flexDirection:"column", gap:4, minWidth:0, width:"100%" }}>
+                    {evs.map((ev, i) => (
+                      <div key={i}
+                        draggable={!isPast}
+                        onDragStart={e => { e.stopPropagation(); handleDragStart(e, key, i); }}
+                        onDragEnd={handleDragEnd}
+                        onDoubleClick={e => { e.stopPropagation(); if (!isPast) openEditEvent(key, i); }}
+                        style={{
+                          fontSize:9, fontWeight:700, background: isPast ? "#CCCCCC" : ev.color, color: isPast ? "#999" : "#fff",
+                          borderRadius:4, padding:"3px 4px", textAlign:"center", lineHeight:1.2,
+                          textShadow: isPast ? "none" : "0 1px 2px rgba(0,0,0,0.15)",
+                          cursor: isPast ? "default" : "grab",
+                          opacity: dragInfo && dragInfo.dateKey===key && dragInfo.evIdx===i ? 0.4 : 1,
+                          overflow:"hidden", minWidth:0, maxWidth:"100%", boxSizing:"border-box",
+                        }}>
+                        <div style={{ fontSize:8, fontWeight:800, opacity:0.85, marginBottom:1 }}>{ev.time}</div>
+                        <div style={{ whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{ev.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ADD EVENT */}
+      {showAddEvent && <Modal title="Add Event" onClose={() => setShowAddEvent(false)}>
+        <div style={{marginBottom:14}}><label style={labelStyle}>Event Name</label><input style={inputStyle} value={newLabel} onChange={e => setNewLabel(e.target.value)} placeholder="e.g. Swimming Class" /></div>
+        <div style={{marginBottom:14}}><label style={labelStyle}>Date</label><input type="date" style={inputStyle} value={newDate} onChange={e => setNewDate(e.target.value)} min="2026-08-01" max="2026-08-31" /></div>
+        <div style={{marginBottom:14}}><label style={labelStyle}>Time</label><input style={inputStyle} value={newTime} onChange={e => setNewTime(e.target.value)} placeholder="e.g. 10:00 AM or 2:00 PM – 4:00 PM" /></div>
+        <div style={{marginBottom:20}}><label style={labelStyle}>Color</label><div style={{display:"flex",flexWrap:"wrap",gap:8}}>
+          {COLOR_OPTIONS.map(c => <div key={c.hex} onClick={() => setNewColor(c.hex)} style={{ width:32, height:32, borderRadius:8, background:c.hex, cursor:"pointer", border: newColor===c.hex ? "3px solid #2D3436" : "3px solid transparent" }} title={c.name} />)}
+        </div></div>
+        <button onClick={addEvent} style={{ ...btnBase, width:"100%", padding:"12px", fontSize:15, background:"linear-gradient(135deg, #0984E3, #74B9FF)", color:"#fff" }}>Add Event</button>
+      </Modal>}
+
+      {/* RECURRING */}
+      {showRecurring && <Modal title="Add Recurring Event" onClose={() => setShowRecurring(false)}>
+        <div style={{marginBottom:14}}><label style={labelStyle}>Event Name</label><input style={inputStyle} value={recLabel} onChange={e => setRecLabel(e.target.value)} placeholder="e.g. Swimming Class" /></div>
+        <div style={{marginBottom:14}}><label style={labelStyle}>Day of Week</label><select style={inputStyle} value={recDay} onChange={e => setRecDay(e.target.value)}>{DAY_OPTIONS.map(d => <option key={d} value={d}>{d}</option>)}</select></div>
+        <div style={{marginBottom:14}}><label style={labelStyle}>Time</label><input style={inputStyle} value={recTime} onChange={e => setRecTime(e.target.value)} placeholder="e.g. 10:00 AM or 2:00 PM – 4:00 PM" /></div>
+        <div style={{display:"flex",gap:10,marginBottom:14}}>
+          <div style={{flex:1}}><label style={labelStyle}>From</label><input type="date" style={inputStyle} value={recFrom} onChange={e => setRecFrom(e.target.value)} /></div>
+          <div style={{flex:1}}><label style={labelStyle}>To</label><input type="date" style={inputStyle} value={recTo} onChange={e => setRecTo(e.target.value)} /></div>
+        </div>
+        <div style={{marginBottom:20}}><label style={labelStyle}>Color</label><div style={{display:"flex",flexWrap:"wrap",gap:8}}>
+          {COLOR_OPTIONS.map(c => <div key={c.hex} onClick={() => setRecColor(c.hex)} style={{ width:32, height:32, borderRadius:8, background:c.hex, cursor:"pointer", border: recColor===c.hex ? "3px solid #2D3436" : "3px solid transparent" }} title={c.name} />)}
+        </div></div>
+        <button onClick={addRecurring} style={{ ...btnBase, width:"100%", padding:"12px", fontSize:15, background:"linear-gradient(135deg, #00B894, #55EFC4)", color:"#fff" }}>Add Recurring Event</button>
+      </Modal>}
+
+      {/* COLOR LABELS */}
+      {showLabels && <Modal title="Color Labels" onClose={() => setShowLabels(false)}>
+        <div style={{fontSize:12,color:"#636E72",fontWeight:600,marginBottom:16}}>Tap a color swatch to change the color for that activity across all dates.</div>
+        {Object.entries(allLabels).sort((a,b) => a[0].localeCompare(b[0])).map(([label, color]) => (
+          <div key={label} style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 0",borderBottom:"1px solid #F0F0F0" }}>
+            <div style={{display:"flex",alignItems:"center",gap:10}}>
+              <div style={{ width:16,height:16,borderRadius:4,background:color }} />
+              <span style={{ fontSize:14,fontWeight:700,color:"#2D3436" }}>{label}</span>
+            </div>
+            <div style={{display:"flex",gap:4}}>
+              {COLOR_OPTIONS.map(c => <div key={c.hex} onClick={() => updateLabelColor(label, c.hex)} style={{ width:22,height:22,borderRadius:6,background:c.hex,cursor:"pointer",border: color===c.hex ? "2px solid #2D3436" : "2px solid transparent" }} title={c.name} />)}
+            </div>
+          </div>
+        ))}
+      </Modal>}
+
+      {/* EDIT EVENT */}
+      {editInfo && <Modal title="Edit Event" onClose={() => setEditInfo(null)}>
+        <div style={{marginBottom:14}}><label style={labelStyle}>Event Name</label><input style={inputStyle} value={editLabel} onChange={e => setEditLabel(e.target.value)} /></div>
+        <div style={{marginBottom:14}}><label style={labelStyle}>Time</label><input style={inputStyle} value={editTime} onChange={e => setEditTime(e.target.value)} /></div>
+        <div style={{marginBottom:20}}><label style={labelStyle}>Color</label><div style={{display:"flex",flexWrap:"wrap",gap:8}}>
+          {COLOR_OPTIONS.map(c => <div key={c.hex} onClick={() => setEditColor(c.hex)} style={{ width:32,height:32,borderRadius:8,background:c.hex,cursor:"pointer",border: editColor===c.hex ? "3px solid #2D3436" : "3px solid transparent" }} title={c.name} />)}
+        </div></div>
+        <div style={{display:"flex",gap:10}}>
+          <button onClick={saveEditEvent} style={{ ...btnBase, flex:1, padding:"12px", fontSize:14, background:"linear-gradient(135deg, #0984E3, #74B9FF)", color:"#fff" }}>Save</button>
+          <button onClick={deleteEditEvent} style={{ ...btnBase, flex:1, padding:"12px", fontSize:14, background:"linear-gradient(135deg, #E74C3C, #FF7675)", color:"#fff" }}>Delete</button>
+        </div>
+      </Modal>}
+
+      {/* PASTE & PARSE */}
+      {showPaste && <Modal title="📋 Paste & Parse" onClose={() => setShowPaste(false)}>
+        {!parsedEvents ? (
+          <div>
+            <div style={{fontSize:12,color:"#636E72",fontWeight:600,marginBottom:12}}>
+              Paste a WhatsApp message, email, or schedule. Put one event per line with a date, time, and name.
+            </div>
+            <div style={{fontSize:11,color:"#B2BEC3",fontWeight:600,marginBottom:8,lineHeight:1.5}}>
+              Examples that work well:<br/>
+              • 20/08 2pm-4pm Swimming<br/>
+              • Aug 22, 10:00 AM – 12:00 PM Art Class<br/>
+              • 25 Aug 9am Ballet
+            </div>
+            <textarea style={{ ...inputStyle, minHeight:120, resize:"vertical", marginBottom:14 }}
+              value={pasteText} onChange={e => setPasteText(e.target.value)}
+              placeholder={"Paste your message here...\n\ne.g.\n20/08 2pm-4pm Swimming\n22/08 10am-12pm Art Class\n25 Aug 9am Ballet"} />
+            {parseError && <div style={{fontSize:12,color:"#E74C3C",fontWeight:700,marginBottom:10}}>{parseError}</div>}
+            <button onClick={handleParse}
+              style={{ ...btnBase, width:"100%", padding:"12px", fontSize:15,
+                background: "linear-gradient(135deg, #FDCB6E, #F39C12)", color:"#fff" }}>
+              📋 Parse Text
+            </button>
+          </div>
+        ) : (
+          <div>
+            <div style={{fontSize:12,color:"#636E72",fontWeight:600,marginBottom:12}}>
+              {parsedEvents.length} event{parsedEvents.length !== 1 ? "s" : ""} found. Review and remove any you don't want, then confirm.
+            </div>
+            <div style={{maxHeight:300,overflowY:"auto",marginBottom:14}}>
+              {parsedEvents.map((ev, i) => (
+                <div key={i} style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"8px 10px",
+                  background:`${ev.color || "#2196F3"}15`, borderLeft:`4px solid ${ev.color || "#2196F3"}`, borderRadius:8, marginBottom:6 }}>
+                  <div>
+                    <div style={{fontSize:13,fontWeight:700,color:"#2D3436"}}>{ev.label}</div>
+                    <div style={{fontSize:11,fontWeight:600,color:"#636E72"}}>{ev.date} · {ev.time}</div>
+                  </div>
+                  <button onClick={() => removeParsedEvent(i)}
+                    style={{ ...btnBase, background:"#FFE0E0", color:"#E74C3C", padding:"4px 10px", fontSize:11 }}>✕</button>
+                </div>
+              ))}
+            </div>
+            <div style={{display:"flex",gap:10}}>
+              <button onClick={confirmParsed}
+                style={{ ...btnBase, flex:1, padding:"12px", fontSize:14, background:"linear-gradient(135deg, #00B894, #55EFC4)", color:"#fff" }}>
+                ✓ Add {parsedEvents.length} Event{parsedEvents.length !== 1 ? "s" : ""}
+              </button>
+              <button onClick={() => setParsedEvents(null)}
+                style={{ ...btnBase, flex:1, padding:"12px", fontSize:14, background:"#F0F0F0", color:"#636E72" }}>
+                ← Back
+              </button>
+            </div>
+          </div>
+        )}
+      </Modal>}
+    </div>
+  );
+}
+
+ReactDOM.render(React.createElement(CCCalendar), document.getElementById("root"));
+</script>
+</body>
+</html>
