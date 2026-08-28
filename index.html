@@ -15,8 +15,38 @@
   body { font-family: 'Nunito', 'Quicksand', sans-serif; }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  @keyframes photoRailScroll { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+  @keyframes photoRailScrollMobile { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   .cal-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .cal-grid-wrap { min-width: 700px; }
+  .calendar-layout { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 20px; align-items: stretch; }
+  .photo-rail { position: relative; height: 100%; min-height: 720px; overflow: hidden; border-radius: 20px; background: rgba(255,255,255,0.62); box-shadow: 0 8px 30px rgba(0,0,0,0.07); }
+  .photo-rail::before, .photo-rail::after { content:""; position:absolute; left:0; right:0; height:80px; z-index:2; pointer-events:none; }
+  .photo-rail::before { top:0; background:linear-gradient(to bottom, #fffaf0, rgba(255,250,240,0)); }
+  .photo-rail::after { bottom:0; background:linear-gradient(to top, #f2f7f7, rgba(242,247,247,0)); }
+  .photo-rail-track { display:flex; flex-direction:column; gap:14px; padding:14px; animation:photoRailScroll 70s linear infinite; will-change:transform; }
+  .photo-rail:hover .photo-rail-track { animation-play-state:paused; }
+  .photo-card { flex:none; padding:8px 8px 24px; border-radius:12px; background:#fff; box-shadow:0 5px 16px rgba(45,52,54,0.12); transform:rotate(-1.3deg); }
+  .photo-card:nth-child(even) { transform:rotate(1.3deg); }
+  .photo-card img { display:block; width:100%; height:170px; border-radius:8px; object-fit:cover; background:#f5efe4; }
+  .photo-placeholder { height:170px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px; color:#7b6f65; font-weight:800; text-align:center; background:linear-gradient(145deg, #ffe8cd, #e4f3f4); }
+  .photo-placeholder span { font-size:34px; }
+  .photo-card-caption { margin-top:10px; text-align:center; font-family:'Quicksand',sans-serif; font-size:11px; font-weight:700; color:#636E72; }
+  .photo-rail-label { position:absolute; top:12px; left:50%; transform:translateX(-50%); z-index:3; padding:6px 12px; border-radius:999px; background:rgba(255,255,255,0.92); box-shadow:0 3px 10px rgba(0,0,0,0.08); color:#E17055; font-size:11px; font-weight:800; white-space:nowrap; }
+  @media (max-width: 1050px) {
+    .calendar-layout { grid-template-columns:1fr; }
+    .photo-rail { height:220px; min-height:0; }
+    .photo-rail::before, .photo-rail::after { top:0; bottom:0; width:70px; height:auto; }
+    .photo-rail::before { left:0; right:auto; background:linear-gradient(to right, #fffaf0, rgba(255,250,240,0)); }
+    .photo-rail::after { right:0; left:auto; background:linear-gradient(to left, #f2f7f7, rgba(242,247,247,0)); }
+    .photo-rail-track { width:max-content; height:100%; flex-direction:row; padding:12px; animation-name:photoRailScrollMobile; }
+    .photo-card { width:170px; padding:7px 7px 18px; }
+    .photo-card img, .photo-placeholder { height:150px; }
+    .photo-card-caption { display:none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .photo-rail-track { animation-play-state:paused; }
+  }
   @media (max-width: 768px) {
     .action-btns { gap: 6px !important; }
     .action-btns button { padding: 8px 12px !important; font-size: 11px !important; }
@@ -166,6 +196,13 @@ const COLOR_OPTIONS = [
 ];
 const DAY_OPTIONS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 
+const PHOTO_RAIL_ITEMS = [
+  { src:"photos/web/fukuoka-shrine.webp", alt:"CC exploring a shrine in Fukuoka", caption:"Fukuoka adventures" },
+  { src:"photos/web/fukuoka-family-dinner.webp", alt:"Family dinner together in Fukuoka", caption:"Family dinner" },
+  { src:"photos/web/brothers-birthday-cake.webp", alt:"CC and TT sharing a birthday cake", caption:"Birthday cake together", position:"center 62%" },
+  { src:"photos/web/brothers-ball-pit.webp", alt:"CC and TT playing together in a ball pit", caption:"Ball pit fun" },
+];
+
 const btnBase = { border:"none", borderRadius:10, fontFamily:"'Nunito',sans-serif", fontWeight:700, cursor:"pointer", transition:"all 0.2s ease" };
 const inputStyle = { width:"100%", padding:"10px 12px", borderRadius:8, border:"1.5px solid #E0E0E0", fontFamily:"'Nunito',sans-serif", fontSize:14, fontWeight:600, outline:"none", boxSizing:"border-box" };
 const labelStyle = { fontSize:12, fontWeight:700, color:"#636E72", marginBottom:4, display:"block" };
@@ -179,6 +216,25 @@ function Modal({ title, onClose, children }) {
       ),
       children
     )
+  );
+}
+
+function PhotoRail() {
+  const loopingItems = [...PHOTO_RAIL_ITEMS, ...PHOTO_RAIL_ITEMS];
+  return (
+    <aside className="photo-rail" aria-label="CC and TT photo memories">
+      <div className="photo-rail-label">Our memories ✨</div>
+      <div className="photo-rail-track">
+        {loopingItems.map((photo, index) => (
+          <figure className="photo-card" key={index} aria-hidden={index >= PHOTO_RAIL_ITEMS.length ? "true" : undefined}>
+            {photo.src
+              ? <img src={photo.src} alt={photo.alt || photo.caption || "CC and TT memory"} loading="lazy" style={{objectPosition:photo.position || "center"}} />
+              : <div className="photo-placeholder" aria-hidden="true"><span>{photo.icon}</span><small>Photo coming soon</small></div>}
+            <figcaption className="photo-card-caption">{photo.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </aside>
   );
 }
 
@@ -474,7 +530,7 @@ function CCCalendar() {
 
   return (
     <div style={{ fontFamily:"'Nunito','Quicksand',sans-serif", background:"linear-gradient(135deg, #FFF8E7 0%, #FFF0D4 50%, #E8F4FD 100%)", minHeight:"100vh", padding:"24px 16px", boxSizing:"border-box" }}>
-      <div style={{ maxWidth:1100, margin:"0 auto" }}>
+      <div style={{ maxWidth:1380, margin:"0 auto" }}>
         <div style={{ textAlign:"center", marginBottom:20 }}>
           <h1 style={{ fontSize:28, fontWeight:800, color:"#2D3436", margin:"0 0 6px 0", fontFamily:"'Nunito',sans-serif" }}>CC and TT's Timetable ☀️</h1>
         </div>
@@ -501,6 +557,7 @@ function CCCalendar() {
           ))}
         </div>
 
+        <div className="calendar-layout">
         <div className="cal-scroll" style={{ background:"#fff", borderRadius:20, padding:20, boxShadow:"0 8px 30px rgba(0,0,0,0.07)" }}>
           <div className="cal-grid-wrap">
           <div style={{ display:"grid", gridTemplateColumns:"repeat(7, 1fr)", gap:4 }}>
@@ -561,6 +618,8 @@ function CCCalendar() {
             })}
           </div>
           </div>
+        </div>
+        <PhotoRail />
         </div>
       </div>
 
