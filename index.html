@@ -46,6 +46,7 @@ const MONTHS = [
   { name: "August 2026", year: 2026, month: 7 },
   { name: "September 2026", year: 2026, month: 8 },
   { name: "October 2026", year: 2026, month: 9 },
+  { name: "November 2026", year: 2026, month: 10 },
 ];
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -487,7 +488,7 @@ function CCCalendar() {
           </button>
         </div>
 
-        <div className="month-btns" style={{ display:"flex", justifyContent:"center", gap:8, marginBottom:24 }}>
+        <div className="month-btns" style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:8, marginBottom:24 }}>
           {MONTHS.map((m, i) => (
             <button key={m.name} onClick={() => { setActiveMonth(i); setSelectedDate(null); }}
               style={{ ...btnBase, padding:"10px 28px", fontSize:15,
@@ -566,7 +567,7 @@ function CCCalendar() {
       {/* ADD EVENT */}
       {showAddEvent && <Modal title="Add Event" onClose={() => setShowAddEvent(false)}>
         <div style={{marginBottom:14}}><label style={labelStyle}>Event Name</label><input style={inputStyle} value={newLabel} onChange={e => setNewLabel(e.target.value)} placeholder="e.g. Swimming Class" /></div>
-        <div style={{marginBottom:14}}><label style={labelStyle}>Date</label><input type="date" style={inputStyle} value={newDate} onChange={e => setNewDate(e.target.value)} min="2026-08-01" max="2026-08-31" /></div>
+        <div style={{marginBottom:14}}><label style={labelStyle}>Date</label><input type="date" style={inputStyle} value={newDate} onChange={e => setNewDate(e.target.value)} min="2026-08-01" max="2026-11-30" /></div>
         <div style={{marginBottom:14}}><label style={labelStyle}>Time</label><input style={inputStyle} value={newTime} onChange={e => setNewTime(e.target.value)} placeholder="e.g. 10:00 AM or 2:00 PM – 4:00 PM" /></div>
         <div style={{marginBottom:20}}><label style={labelStyle}>Color</label><div style={{display:"flex",flexWrap:"wrap",gap:8}}>
           {COLOR_OPTIONS.map(c => <div key={c.hex} onClick={() => setNewColor(c.hex)} style={{ width:32, height:32, borderRadius:8, background:c.hex, cursor:"pointer", border: newColor===c.hex ? "3px solid #2D3436" : "3px solid transparent" }} title={c.name} />)}
