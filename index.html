@@ -16,6 +16,7 @@
   frame.addEventListener('load', () => {
     const doc = frame.contentDocument;
     if (!doc || doc.getElementById('sticker-background-fix')) return;
+
     const style = doc.createElement('style');
     style.id = 'sticker-background-fix';
     style.textContent = `
@@ -39,8 +40,47 @@
         position: relative;
         z-index: 1;
       }
+
+      /* Keep the calendar column at its natural content height instead of
+         stretching to match the photo rail. */
+      .calendar-layout {
+        align-items: start !important;
+      }
+      .photo-rail {
+        min-height: 0 !important;
+      }
+
+      @media (max-width: 1050px) {
+        .photo-rail {
+          height: 220px !important;
+        }
+      }
     `;
     doc.head.appendChild(style);
+
+    const syncPhotoRailHeight = () => {
+      if (frame.contentWindow.innerWidth <= 1050) return;
+      const layout = doc.querySelector('.calendar-layout');
+      const rail = doc.querySelector('.photo-rail');
+      if (!layout || !rail) return;
+
+      const calendarColumn = [...layout.children].find(el => !el.classList.contains('photo-rail'));
+      if (!calendarColumn) return;
+
+      rail.style.height = 'auto';
+      const height = Math.ceil(calendarColumn.getBoundingClientRect().height);
+      if (height > 0) rail.style.height = `${height}px`;
+    };
+
+    const syncSoon = () => {
+      requestAnimationFrame(syncPhotoRailHeight);
+      setTimeout(syncPhotoRailHeight, 250);
+      setTimeout(syncPhotoRailHeight, 900);
+    };
+
+    syncSoon();
+    frame.contentWindow.addEventListener('resize', syncSoon);
+    new MutationObserver(syncSoon).observe(doc.body, { subtree: true, childList: true });
   });
 </script>
 </body>
