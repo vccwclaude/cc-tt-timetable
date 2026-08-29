@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CC and TT's Timetable - August 2026</title>
+<title>CC and TT's Timetable</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
@@ -85,12 +85,10 @@
 <script type="text/babel">
 const { useState, useEffect } = React;
 
-const MONTHS = [
-  { name: "August 2026", year: 2026, month: 7 },
-  { name: "September 2026", year: 2026, month: 8 },
-  { name: "October 2026", year: 2026, month: 9 },
-  { name: "November 2026", year: 2026, month: 10 },
-];
+const MONTHS = Array.from({ length: 13 }, (_, i) => {
+  const date = new Date(2026, 7 + i, 1);
+  return { name: date.toLocaleString("en", { month:"long", year:"numeric" }), year:date.getFullYear(), month:date.getMonth() };
+});
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const INITIAL_EVENTS = {
@@ -151,6 +149,32 @@ const INITIAL_EVENTS = {
     { label: "Bear Music", time: "11:15 AM", color: "#FFD700" },
   ],
 };
+
+const SCHOOL_HOLIDAY_RANGES = [
+  ["2026-10-01", "2026-10-02"],
+  ["2026-10-19", "2026-10-19"],
+  ["2026-12-17", "2027-01-03"],
+  ["2027-02-03", "2027-02-14"],
+  ["2027-03-05", "2027-03-05"],
+  ["2027-03-24", "2027-04-05"],
+  ["2027-05-13", "2027-05-13"],
+  ["2027-06-09", "2027-06-09"],
+  ["2027-07-01", "2027-07-01"],
+  ["2027-07-16", "2027-08-23"],
+];
+
+const SCHOOL_HOLIDAY_DATES = SCHOOL_HOLIDAY_RANGES.flatMap(([start, end]) => {
+  const dates = [];
+  for (let date = new Date(start + "T00:00:00"); date <= new Date(end + "T00:00:00"); date.setDate(date.getDate() + 1)) {
+    if (date.getDay() !== 0 && date.getDay() !== 6) dates.push(getKey(date));
+  }
+  return dates;
+});
+
+SCHOOL_HOLIDAY_DATES.forEach(date => {
+  INITIAL_EVENTS[date] = [...(INITIAL_EVENTS[date] || []), { label:"CC school holiday", time:"All Day", color:"#FF6B6B" }];
+});
+console.assert(SCHOOL_HOLIDAY_DATES.length === 63 && SCHOOL_HOLIDAY_DATES.every(date => ![0, 6].includes(new Date(date + "T00:00:00").getDay())), "School holiday dates must contain 63 weekdays only");
 
 const HOLIDAY_START = new Date(2026, 6, 16);
 const HOLIDAY_END = new Date(2026, 7, 25);
@@ -639,7 +663,7 @@ function CCCalendar() {
       {/* ADD EVENT */}
       {showAddEvent && <Modal title="Add Event" onClose={() => setShowAddEvent(false)}>
         <div style={{marginBottom:14}}><label style={labelStyle}>Event Name</label><input style={inputStyle} value={newLabel} onChange={e => setNewLabel(e.target.value)} placeholder="e.g. Swimming Class" /></div>
-        <div style={{marginBottom:14}}><label style={labelStyle}>Date</label><input type="date" style={inputStyle} value={newDate} onChange={e => setNewDate(e.target.value)} min="2026-08-01" max="2026-11-30" /></div>
+        <div style={{marginBottom:14}}><label style={labelStyle}>Date</label><input type="date" style={inputStyle} value={newDate} onChange={e => setNewDate(e.target.value)} min="2026-08-01" max="2027-08-31" /></div>
         <div style={{marginBottom:14}}><label style={labelStyle}>Time</label><input style={inputStyle} value={newTime} onChange={e => setNewTime(e.target.value)} placeholder="e.g. 10:00 AM or 2:00 PM – 4:00 PM" /></div>
         <div style={{marginBottom:20}}><label style={labelStyle}>Color</label><div style={{display:"flex",flexWrap:"wrap",gap:8}}>
           {COLOR_OPTIONS.map(c => <div key={c.hex} onClick={() => setNewColor(c.hex)} style={{ width:32, height:32, borderRadius:8, background:c.hex, cursor:"pointer", border: newColor===c.hex ? "3px solid #2D3436" : "3px solid transparent" }} title={c.name} />)}
