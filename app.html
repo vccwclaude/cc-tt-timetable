@@ -35,7 +35,6 @@
   .photo-placeholder { height:170px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px; color:#7b6f65; font-weight:800; text-align:center; background:linear-gradient(145deg, #ffe8cd, #e4f3f4); }
   .photo-placeholder span { font-size:34px; }
   .photo-card-caption { margin-top:10px; text-align:center; font-family:'Quicksand',sans-serif; font-size:11px; font-weight:700; color:#636E72; }
-  .photo-rail-label { position:absolute; top:12px; left:50%; transform:translateX(-50%); z-index:3; padding:6px 12px; border-radius:999px; background:rgba(255,255,255,0.92); box-shadow:0 3px 10px rgba(0,0,0,0.08); color:#E17055; font-size:11px; font-weight:800; white-space:nowrap; }
   @media (max-width: 1050px) {
     .calendar-layout { grid-template-columns:1fr; }
     .photo-rail { height:220px; min-height:0; }
@@ -260,7 +259,6 @@ function PhotoRail() {
   const loopingItems = [...PHOTO_RAIL_ITEMS, ...PHOTO_RAIL_ITEMS];
   return (
     <aside className="photo-rail" aria-label="CC and TT photo memories">
-      <div className="photo-rail-label">Our memories ✨</div>
       <div className="photo-rail-track">
         {loopingItems.map((photo, index) => (
           <figure className="photo-card" key={index} aria-hidden={index >= PHOTO_RAIL_ITEMS.length ? "true" : undefined}>
