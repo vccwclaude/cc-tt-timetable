@@ -273,9 +273,11 @@ function PhotoRail() {
   );
 }
 
-function parseTextToEvents(text) {
+function parseTextToEvents(text, today = new Date()) {
   const MONTH_MAP = { jan:1,january:1,feb:2,february:2,mar:3,march:3,apr:4,april:4,may:5,jun:6,june:6,jul:7,july:7,aug:8,august:8,sep:9,september:9,oct:10,october:10,nov:11,november:11,dec:12,december:12 };
+  const WEEKDAY_MAP = { sun:0,sunday:0,mon:1,monday:1,tue:2,tuesday:2,wed:3,wednesday:3,thu:4,thurs:4,thursday:4,fri:5,friday:5,sat:6,saturday:6 };
   const COLORS = ["#2196F3","#4CAF50","#FF8C42","#87CEEB","#9B59B6","#E91E63","#85CDCA","#D4A5FF","#FFD700","#FF6B6B","#8D6E63","#FFD93D"];
+  const now = new Date(today); now.setHours(0,0,0,0);
   let colorIdx = 0;
   const pickColor = () => COLORS[colorIdx++ % COLORS.length];
 
@@ -323,24 +325,33 @@ function parseTextToEvents(text) {
 
   function parseDate(s) {
     s = s.replace(/\s+/g," ").trim();
-    // DD/MM/YYYY or DD-MM-YYYY or DD.MM.YYYY
+    const makeDate = (month, day, year) => {
+      const date = new Date(year, month - 1, day);
+      return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day ? { day, month, year } : null;
+    };
+    const inferredDate = (month, day) => {
+      let year = now.getFullYear();
+      if (new Date(year, month - 1, day) < now) year++;
+      return makeDate(month, day, year);
+    };
+    // US numeric format: MM/DD/YYYY or MM-DD-YYYY or MM.DD.YYYY
     let m = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/);
-    if (m) return { day: parseInt(m[1]), month: parseInt(m[2]), year: parseInt(m[3]) };
-    // DD/MM or DD-MM or DD.MM
+    if (m) return makeDate(parseInt(m[1]), parseInt(m[2]), parseInt(m[3]));
+    // US numeric format: MM/DD or MM-DD or MM.DD
     m = s.match(/^(\d{1,2})[\/\-.](\d{1,2})$/);
-    if (m) return { day: parseInt(m[1]), month: parseInt(m[2]), year: 2026 };
+    if (m) return inferredDate(parseInt(m[1]), parseInt(m[2]));
     // DD Mon or DDMon or DD Month
     m = s.match(/^(\d{1,2})\s*([a-zA-Z]+)$/);
-    if (m) { const mo = MONTH_MAP[m[2].toLowerCase()]; if (mo) return { day: parseInt(m[1]), month: mo, year: 2026 }; }
+    if (m) { const mo = MONTH_MAP[m[2].toLowerCase()]; if (mo) return inferredDate(mo, parseInt(m[1])); }
     // Mon DD or Month DD
     m = s.match(/^([a-zA-Z]+)\s+(\d{1,2})$/);
-    if (m) { const mo = MONTH_MAP[m[1].toLowerCase()]; if (mo) return { day: parseInt(m[2]), month: mo, year: 2026 }; }
+    if (m) { const mo = MONTH_MAP[m[1].toLowerCase()]; if (mo) return inferredDate(mo, parseInt(m[2])); }
     // DDst/nd/rd/th Mon
     m = s.match(/^(\d{1,2})(?:st|nd|rd|th)?\s+([a-zA-Z]+)$/);
-    if (m) { const mo = MONTH_MAP[m[2].toLowerCase()]; if (mo) return { day: parseInt(m[1]), month: mo, year: 2026 }; }
+    if (m) { const mo = MONTH_MAP[m[2].toLowerCase()]; if (mo) return inferredDate(mo, parseInt(m[1])); }
     // Mon DDst/nd/rd/th
     m = s.match(/^([a-zA-Z]+)\s+(\d{1,2})(?:st|nd|rd|th)?$/);
-    if (m) { const mo = MONTH_MAP[m[1].toLowerCase()]; if (mo) return { day: parseInt(m[2]), month: mo, year: 2026 }; }
+    if (m) { const mo = MONTH_MAP[m[1].toLowerCase()]; if (mo) return inferredDate(mo, parseInt(m[2])); }
     return null;
   }
 
@@ -358,8 +369,9 @@ function parseTextToEvents(text) {
     let foundDates = [];
     let foundTime = null;
     let label = "";
+    const recurring = line.match(/\bevery(?:thing)?\s+(sun(?:day)?|mon(?:day)?|tue(?:sday)?|wed(?:nesday)?|thu(?:rs(?:day)?)?|fri(?:day)?|sat(?:urday)?)\s+until\s+(\d{1,2}[\/\-.]\d{1,2}(?:[\/\-.]\d{4})?)/i);
 
-    // Extract date patterns: DD/MM, DD/MM/YYYY, DD Mon, Mon DD, etc.
+    // Extract date patterns: MM/DD, MM/DD/YYYY, DD Mon, Mon DD, etc.
     const datePatterns = [
       /(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/g,
       /(\d{1,2}[\/\-\.]\d{1,2})(?!\d)/g,
@@ -374,6 +386,7 @@ function parseTextToEvents(text) {
         if (parsed) foundDates.push({ parsed, raw: dm[0], idx: dm.index });
       }
     }
+    foundDates = foundDates.filter((fd, i) => foundDates.findIndex(other => other.idx === fd.idx) === i);
 
     // Extract time patterns
     const timePatterns = [
@@ -396,11 +409,32 @@ function parseTextToEvents(text) {
     let cleanLine = line;
     if (foundTime) cleanLine = cleanLine.replace(foundTime.raw, " ");
     for (const fd of foundDates) cleanLine = cleanLine.replace(fd.raw, " ");
+    if (recurring) cleanLine = cleanLine.replace(/\bevery(?:thing)?\s+(?:sun(?:day)?|mon(?:day)?|tue(?:sday)?|wed(?:nesday)?|thu(?:rs(?:day)?)?|fri(?:day)?|sat(?:urday)?)\s+until\b/i, " ");
     // Clean up separators and extra whitespace
     label = cleanLine.replace(/^[\s,\-–:;|()\[\]]+|[\s,\-–:;|()\[\]]+$/g, "").replace(/\s+/g," ").trim();
     // Remove day names
     label = label.replace(/\b(mon(?:day)?|tue(?:sday)?|wed(?:nesday)?|thu(?:rsday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)\b/gi, "").replace(/\s+/g," ").trim();
     label = label.replace(/^[\s,\-–:;|()\[\]]+|[\s,\-–:;|()\[\]]+$/g, "").trim();
+
+    if (recurring) {
+      const endParts = parseDate(recurring[2]);
+      const targetDay = WEEKDAY_MAP[recurring[1].toLowerCase()];
+      if (!endParts || targetDay === undefined) continue;
+      const end = new Date(endParts.year, endParts.month - 1, endParts.day);
+      const date = new Date(now); date.setDate(date.getDate() + 1);
+      while (date.getDay() !== targetDay) date.setDate(date.getDate() + 1);
+      const color = pickColor();
+      while (date <= end) {
+        results.push({
+          date: toKey({ year:date.getFullYear(), month:date.getMonth()+1, day:date.getDate() }),
+          label: label || "Event",
+          time: foundTime ? foundTime.parsed : "All Day",
+          color,
+        });
+        date.setDate(date.getDate() + 7);
+      }
+      continue;
+    }
 
     if (foundDates.length > 0 && (foundTime || label)) {
       const color = pickColor();
@@ -534,7 +568,7 @@ function CCCalendar() {
     setParsing(true); setParseError(""); setParsedEvents(null);
     try {
       const result = parseTextToEvents(pasteText);
-      if (result.length === 0) { setParseError("No events found. Try one event per line, e.g.: 20/08 2pm-4pm Swimming"); }
+      if (result.length === 0) { setParseError("No events found. Try one event per line, e.g.: 08/20 2pm-4pm Swimming"); }
       else { setParsedEvents(result); }
     } catch (e) {
       setParseError("Could not parse the text. Try a clearer format.");
@@ -722,13 +756,14 @@ function CCCalendar() {
             </div>
             <div style={{fontSize:11,color:"#B2BEC3",fontWeight:600,marginBottom:8,lineHeight:1.5}}>
               Examples that work well:<br/>
-              • 20/08 2pm-4pm Swimming<br/>
+              • 08/20 2pm-4pm Swimming<br/>
               • Aug 22, 10:00 AM – 12:00 PM Art Class<br/>
-              • 25 Aug 9am Ballet
+              • 25 Aug 9am Ballet<br/>
+              • Every Thursday until 11/26 10am TWD
             </div>
             <textarea style={{ ...inputStyle, minHeight:120, resize:"vertical", marginBottom:14 }}
               value={pasteText} onChange={e => setPasteText(e.target.value)}
-              placeholder={"Paste your message here...\n\ne.g.\n20/08 2pm-4pm Swimming\n22/08 10am-12pm Art Class\n25 Aug 9am Ballet"} />
+              placeholder={"Paste your message here...\n\ne.g.\n08/20 2pm-4pm Swimming\nEvery Thursday until 11/26 10am TWD"} />
             {parseError && <div style={{fontSize:12,color:"#E74C3C",fontWeight:700,marginBottom:10}}>{parseError}</div>}
             <button onClick={handleParse}
               style={{ ...btnBase, width:"100%", padding:"12px", fontSize:15,
