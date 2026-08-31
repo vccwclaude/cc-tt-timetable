@@ -762,8 +762,7 @@ function CCCalendar() {
               • Every Thursday until 11/26 10am TWD
             </div>
             <textarea style={{ ...inputStyle, minHeight:120, resize:"vertical", marginBottom:14 }}
-              value={pasteText} onChange={e => setPasteText(e.target.value)}
-              placeholder={"Paste your message here...\n\ne.g.\n08/20 2pm-4pm Swimming\nEvery Thursday until 11/26 10am TWD"} />
+              value={pasteText} onChange={e => setPasteText(e.target.value)} />
             {parseError && <div style={{fontSize:12,color:"#E74C3C",fontWeight:700,marginBottom:10}}>{parseError}</div>}
             <button onClick={handleParse}
               style={{ ...btnBase, width:"100%", padding:"12px", fontSize:15,
