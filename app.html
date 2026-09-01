@@ -82,7 +82,7 @@
 </aside>
 <div id="root"></div>
 <script type="text/babel">
-const { useState, useEffect } = React;
+const { useState, useEffect, useRef } = React;
 
 const MONTHS = Array.from({ length: 13 }, (_, i) => {
   const date = new Date(2026, 7 + i, 1);
@@ -186,6 +186,12 @@ function isPublicHoliday(date) {
 }
 function getKey(date) {
   return date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");
+}
+function getDateKeysBetween(startKey, endKey) {
+  const [first, last] = [startKey, endKey].sort();
+  const keys = [];
+  for (let date = new Date(first+"T00:00:00"), end = new Date(last+"T00:00:00"); date <= end; date.setDate(date.getDate()+1)) keys.push(getKey(date));
+  return keys;
 }
 function parseTime(timeStr) {
   if (!timeStr || timeStr === "All Day" || timeStr === "TBC") return null;
@@ -470,8 +476,11 @@ function CCCalendar() {
   const [editColor, setEditColor] = useState("#2196F3");
   const [newLabel, setNewLabel] = useState("");
   const [newDate, setNewDate] = useState("");
+  const [newEndDate, setNewEndDate] = useState("");
   const [newTime, setNewTime] = useState("");
   const [newColor, setNewColor] = useState("#2196F3");
+  const [rangeDrag, setRangeDrag] = useState(null);
+  const rangeDragged = useRef(false);
   const [recLabel, setRecLabel] = useState("");
   const [recDay, setRecDay] = useState("Monday");
   const [recTime, setRecTime] = useState("");
@@ -495,6 +504,19 @@ function CCCalendar() {
     return () => ref.off();
   }, []);
 
+  useEffect(() => {
+    if (!rangeDrag) return;
+    const finishRange = () => {
+      const { start, end } = rangeDrag;
+      setRangeDrag(null);
+      if (!rangeDragged.current) return;
+      const [first, last] = [start, end].sort();
+      setNewDate(first); setNewEndDate(last); setSelectedDate(null); setShowAddEvent(true);
+    };
+    window.addEventListener("pointerup", finishRange);
+    return () => window.removeEventListener("pointerup", finishRange);
+  }, [rangeDrag]);
+
   const updateEvents = (ne) => { setEvents(ne); setHasUnsaved(true); setSaveStatus(""); };
   const saveChanges = () => {
     setSaveStatus("saving");
@@ -506,14 +528,18 @@ function CCCalendar() {
   const current = MONTHS[activeMonth];
   const days = getCalendarDays(current.year, current.month);
   const selectedKey = selectedDate ? getKey(selectedDate) : null;
+  const rangeFirst = rangeDrag ? [rangeDrag.start, rangeDrag.end].sort()[0] : null;
+  const rangeLast = rangeDrag ? [rangeDrag.start, rangeDrag.end].sort()[1] : null;
 
   const addEvent = () => {
     if (!newLabel || !newDate || !newTime) return;
     const updated = { ...events };
-    if (!updated[newDate]) updated[newDate] = [];
-    updated[newDate] = [...updated[newDate], { label: newLabel, time: newTime, color: newColor }];
+    const dateKeys = getDateKeysBetween(newDate, newEndDate || newDate);
+    const rangeId = dateKeys.length > 1 ? "range-"+Date.now() : null;
+    const event = { label:newLabel, time:newTime, color:newColor, ...(rangeId ? { rangeId, rangeStart:dateKeys[0], rangeEnd:dateKeys[dateKeys.length-1] } : {}) };
+    dateKeys.forEach(key => { updated[key] = [...(updated[key] || []), event]; });
     updateEvents(updated);
-    setNewLabel(""); setNewDate(""); setNewTime(""); setNewColor("#2196F3"); setShowAddEvent(false);
+    setNewLabel(""); setNewDate(""); setNewEndDate(""); setNewTime(""); setNewColor("#2196F3"); setShowAddEvent(false);
   };
   const addRecurring = () => {
     if (!recLabel || !recTime) return;
@@ -547,18 +573,36 @@ function CCCalendar() {
     updateEvents(updated); setDragInfo(null);
   };
   const handleDragEnd = () => { setDragInfo(null); setDropTarget(null); };
+  const handleRangeStart = (e, dateKey) => { if (e.button !== 0) return; rangeDragged.current = false; setRangeDrag({ start:dateKey, end:dateKey }); };
+  const handleRangeEnter = (dateKey) => setRangeDrag(current => {
+    if (!current) return current;
+    if (dateKey !== current.start) rangeDragged.current = true;
+    return current.end === dateKey ? current : { ...current, end:dateKey };
+  });
 
   const openEditEvent = (dateKey, evIdx) => { const ev = events[dateKey]?.[evIdx]; if (!ev) return; setEditInfo({ dateKey, evIdx }); setEditLabel(ev.label); setEditTime(ev.time); setEditColor(ev.color); };
   const saveEditEvent = () => {
     if (!editInfo || !editLabel || !editTime) return;
-    const updated = { ...events }; const list = [...(updated[editInfo.dateKey] || [])];
-    list[editInfo.evIdx] = { label: editLabel, time: editTime, color: editColor }; updated[editInfo.dateKey] = list;
+    const original = events[editInfo.dateKey]?.[editInfo.evIdx];
+    const updated = { ...events };
+    if (original?.rangeId) {
+      Object.keys(updated).forEach(key => { updated[key] = updated[key].map(ev => ev.rangeId === original.rangeId ? { ...ev, label:editLabel, time:editTime, color:editColor } : ev); });
+    } else {
+      const list = [...(updated[editInfo.dateKey] || [])];
+      list[editInfo.evIdx] = { label:editLabel, time:editTime, color:editColor }; updated[editInfo.dateKey] = list;
+    }
     updateEvents(updated); setEditInfo(null);
   };
   const deleteEditEvent = () => {
     if (!editInfo) return;
-    const updated = { ...events }; const list = [...(updated[editInfo.dateKey] || [])]; list.splice(editInfo.evIdx, 1);
-    if (list.length === 0) delete updated[editInfo.dateKey]; else updated[editInfo.dateKey] = list;
+    const original = events[editInfo.dateKey]?.[editInfo.evIdx];
+    const updated = { ...events };
+    if (original?.rangeId) {
+      Object.keys(updated).forEach(key => { const list = updated[key].filter(ev => ev.rangeId !== original.rangeId); if (list.length) updated[key] = list; else delete updated[key]; });
+    } else {
+      const list = [...(updated[editInfo.dateKey] || [])]; list.splice(editInfo.evIdx, 1);
+      if (list.length === 0) delete updated[editInfo.dateKey]; else updated[editInfo.dateKey] = list;
+    }
     updateEvents(updated); setEditInfo(null);
   };
 
@@ -605,7 +649,7 @@ function CCCalendar() {
         </div>
 
         <div className="action-btns" style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:8, marginBottom:20 }}>
-          <button onClick={() => setShowAddEvent(true)} style={{ ...btnBase, background:"linear-gradient(135deg, #0984E3, #74B9FF)", color:"#fff", padding:"10px 20px", fontSize:13, boxShadow:"0 3px 10px rgba(9,132,227,0.3)" }}>+ Add Event</button>
+          <button onClick={() => { setNewDate(""); setNewEndDate(""); setShowAddEvent(true); }} style={{ ...btnBase, background:"linear-gradient(135deg, #0984E3, #74B9FF)", color:"#fff", padding:"10px 20px", fontSize:13, boxShadow:"0 3px 10px rgba(9,132,227,0.3)" }}>+ Add Event</button>
           <button onClick={() => setShowRecurring(true)} style={{ ...btnBase, background:"linear-gradient(135deg, #00B894, #55EFC4)", color:"#fff", padding:"10px 20px", fontSize:13, boxShadow:"0 3px 10px rgba(0,184,148,0.3)" }}>🔄 Recurring</button>
           <button onClick={() => { setShowPaste(true); setParsedEvents(null); setParseError(""); }} style={{ ...btnBase, background:"linear-gradient(135deg, #FDCB6E, #F39C12)", color:"#fff", padding:"10px 20px", fontSize:13, boxShadow:"0 3px 10px rgba(243,156,18,0.3)" }}>📋 Paste & Parse</button>
           <button onClick={saveChanges} style={{ ...btnBase, padding:"10px 20px", fontSize:13, background: hasUnsaved ? "linear-gradient(135deg, #E74C3C, #FF6B6B)" : "linear-gradient(135deg, #B2BEC3, #DFE6E9)", color:"#fff", boxShadow: hasUnsaved ? "0 3px 10px rgba(231,76,60,0.3)" : "none", animation: hasUnsaved ? "pulse 2s infinite" : "none" }}>
@@ -645,19 +689,22 @@ function CCCalendar() {
               const today = new Date(); today.setHours(0,0,0,0);
               const isPast = date < today;
               const isToday = date.getTime() === today.getTime();
+              const isInDragRange = rangeFirst && key >= rangeFirst && key <= rangeLast;
               return (
-                <div key={key}
-                  onClick={() => setSelectedDate(isSel ? null : date)}
-                  onDoubleClick={() => { setNewDate(key); setShowAddEvent(true); }}
+                <div key={key} data-date={key}
+                  onPointerDown={e => handleRangeStart(e, key)}
+                  onPointerEnter={() => handleRangeEnter(key)}
+                  onClick={() => { if (rangeDragged.current) { rangeDragged.current = false; return; } setSelectedDate(isSel ? null : date); }}
+                  onDoubleClick={() => { setNewDate(key); setNewEndDate(""); setShowAddEvent(true); }}
                   onDragOver={e => handleDragOver(e, key)}
                   onDragLeave={handleDragLeave}
                   onDrop={e => handleDrop(e, key)}
                   style={{
                     minHeight:110, borderRadius:12, padding:"6px 3px", cursor:"pointer",
                     transition:"all 0.2s ease", overflow:"hidden",
-                    border: dropTarget===key ? "2px dashed #0984E3" : isSel ? "2px solid #E74C3C" : "2px solid transparent",
-                    background: isPast ? "#F0F0F0" : isToday ? "#BBDEFB" : dropTarget===key ? "#E3F2FD" : ph ? "#E8F5E9" : holiday ? "linear-gradient(135deg, #FFF8E1, #FFF3D6)" : isWknd ? "#FAFAFA" : "#fff",
-                    position:"relative", opacity: isPast ? 0.5 : 1,
+                    border: dropTarget===key ? "2px dashed #0984E3" : isInDragRange ? "2px solid #0984E3" : isSel ? "2px solid #E74C3C" : "2px solid transparent",
+                    background: isInDragRange ? "#DFF1FF" : isPast ? "#F0F0F0" : isToday ? "#BBDEFB" : dropTarget===key ? "#E3F2FD" : ph ? "#E8F5E9" : holiday ? "linear-gradient(135deg, #FFF8E1, #FFF3D6)" : isWknd ? "#FAFAFA" : "#fff",
+                    position:"relative", opacity: isPast ? 0.5 : 1, userSelect:"none",
                   }}>
                   {clash && !isPast && <div style={{ position:"absolute", top:3, right:5, fontSize:10, color:"#E74C3C", fontWeight:800 }}>⭐</div>}
                   <div style={{ fontSize:14, fontWeight:700, color: isPast ? "#B0B0B0" : isWknd ? "#E17055" : "#2D3436", textAlign:"center", marginBottom:4 }}>{date.getDate()}</div>
@@ -665,7 +712,8 @@ function CCCalendar() {
                   <div style={{ display:"flex", flexDirection:"column", gap:4, minWidth:0, width:"100%" }}>
                     {evs.map((ev, i) => (
                       <div key={i}
-                        draggable={!isPast}
+                        draggable={!isPast && !ev.rangeId}
+                        onPointerDown={e => e.stopPropagation()}
                         onDragStart={e => { e.stopPropagation(); handleDragStart(e, key, i); }}
                         onDragEnd={handleDragEnd}
                         onDoubleClick={e => { e.stopPropagation(); if (!isPast) openEditEvent(key, i); }}
@@ -673,7 +721,7 @@ function CCCalendar() {
                           fontSize:9, fontWeight:700, background: isPast ? "#CCCCCC" : ev.color, color: isPast ? "#999" : "#fff",
                           borderRadius:4, padding:"3px 4px", textAlign:"center", lineHeight:1.2,
                           textShadow: isPast ? "none" : "0 1px 2px rgba(0,0,0,0.15)",
-                          cursor: isPast ? "default" : "grab",
+                          cursor: isPast || ev.rangeId ? "default" : "grab",
                           opacity: dragInfo && dragInfo.dateKey===key && dragInfo.evIdx===i ? 0.4 : 1,
                           overflow:"hidden", minWidth:0, maxWidth:"100%", boxSizing:"border-box",
                         }}>
@@ -693,9 +741,12 @@ function CCCalendar() {
       </div>
 
       {/* ADD EVENT */}
-      {showAddEvent && <Modal title="Add Event" onClose={() => setShowAddEvent(false)}>
+      {showAddEvent && <Modal title="Add Event" onClose={() => { setShowAddEvent(false); setNewEndDate(""); }}>
         <div style={{marginBottom:14}}><label style={labelStyle}>Event Name</label><input style={inputStyle} value={newLabel} onChange={e => setNewLabel(e.target.value)} placeholder="e.g. Swimming Class" /></div>
-        <div style={{marginBottom:14}}><label style={labelStyle}>Date</label><input type="date" style={inputStyle} value={newDate} onChange={e => setNewDate(e.target.value)} min="2026-08-01" max="2027-08-31" /></div>
+        <div style={{display:"flex",gap:10,marginBottom:14}}>
+          <div style={{flex:1}}><label style={labelStyle}>Start Date</label><input type="date" style={inputStyle} value={newDate} onChange={e => setNewDate(e.target.value)} min="2026-08-01" max="2027-08-31" /></div>
+          <div style={{flex:1}}><label style={labelStyle}>End Date</label><input type="date" style={inputStyle} value={newEndDate || newDate} onChange={e => setNewEndDate(e.target.value)} min={newDate || "2026-08-01"} max="2027-08-31" /></div>
+        </div>
         <div style={{marginBottom:14}}><label style={labelStyle}>Time</label><input style={inputStyle} value={newTime} onChange={e => setNewTime(e.target.value)} placeholder="e.g. 10:00 AM or 2:00 PM – 4:00 PM" /></div>
         <div style={{marginBottom:20}}><label style={labelStyle}>Color</label><div style={{display:"flex",flexWrap:"wrap",gap:8}}>
           {COLOR_OPTIONS.map(c => <div key={c.hex} onClick={() => setNewColor(c.hex)} style={{ width:32, height:32, borderRadius:8, background:c.hex, cursor:"pointer", border: newColor===c.hex ? "3px solid #2D3436" : "3px solid transparent" }} title={c.name} />)}
