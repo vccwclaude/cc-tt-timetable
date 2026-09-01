@@ -88,6 +88,7 @@ const MONTHS = Array.from({ length: 13 }, (_, i) => {
   const date = new Date(2026, 7 + i, 1);
   return { name: date.toLocaleString("en", { month:"long", year:"numeric" }), year:date.getFullYear(), month:date.getMonth() };
 });
+const isMonthFullyPast = ({ year, month }) => new Date(year, month + 1, 1) <= new Date();
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const INITIAL_EVENTS = {
@@ -458,7 +459,10 @@ function parseTextToEvents(text, today = new Date()) {
 }
 
 function CCCalendar() {
-  const [activeMonth, setActiveMonth] = useState(0);
+  const [activeMonth, setActiveMonth] = useState(() => {
+    const firstVisible = MONTHS.findIndex(m => !isMonthFullyPast(m));
+    return firstVisible < 0 ? MONTHS.length - 1 : firstVisible;
+  });
   const [selectedDate, setSelectedDate] = useState(null);
   const [events, setEvents] = useState(INITIAL_EVENTS);
   const [showAddEvent, setShowAddEvent] = useState(false);
@@ -658,7 +662,7 @@ function CCCalendar() {
         </div>
 
         <div className="month-btns" style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:8, marginBottom:24 }}>
-          {MONTHS.map((m, i) => (
+          {MONTHS.map((m, i) => !isMonthFullyPast(m) && (
             <button key={m.name} onClick={() => { setActiveMonth(i); setSelectedDate(null); }}
               style={{ ...btnBase, padding:"10px 28px", fontSize:15,
                 background: activeMonth === i ? "linear-gradient(135deg, #FF9A56, #FF6B6B)" : "#fff",
