@@ -435,7 +435,7 @@ function parseTextToEvents(text, today = new Date()) {
         results.push({
           date: toKey({ year:date.getFullYear(), month:date.getMonth()+1, day:date.getDate() }),
           label: label || "Event",
-          time: foundTime ? foundTime.parsed : "All Day",
+          time: foundTime ? foundTime.parsed : "",
           color,
         });
         date.setDate(date.getDate() + 7);
@@ -449,7 +449,7 @@ function parseTextToEvents(text, today = new Date()) {
         results.push({
           date: toKey(fd.parsed),
           label: label || "Event",
-          time: foundTime ? foundTime.parsed : "All Day",
+          time: foundTime ? foundTime.parsed : "",
           color,
         });
       }
@@ -536,7 +536,7 @@ function CCCalendar() {
   const rangeLast = rangeDrag ? [rangeDrag.start, rangeDrag.end].sort()[1] : null;
 
   const addEvent = () => {
-    if (!newLabel || !newDate || !newTime) return;
+    if (!newLabel || !newDate) return;
     const updated = { ...events };
     const dateKeys = getDateKeysBetween(newDate, newEndDate || newDate);
     const rangeId = dateKeys.length > 1 ? "range-"+Date.now() : null;
@@ -546,7 +546,7 @@ function CCCalendar() {
     setNewLabel(""); setNewDate(""); setNewEndDate(""); setNewTime(""); setNewColor("#2196F3"); setShowAddEvent(false);
   };
   const addRecurring = () => {
-    if (!recLabel || !recTime) return;
+    if (!recLabel) return;
     const dayIdx = DAY_OPTIONS.indexOf(recDay);
     const jsDayIdx = dayIdx === 6 ? 0 : dayIdx + 1;
     const updated = { ...events };
@@ -584,9 +584,9 @@ function CCCalendar() {
     return current.end === dateKey ? current : { ...current, end:dateKey };
   });
 
-  const openEditEvent = (dateKey, evIdx) => { const ev = events[dateKey]?.[evIdx]; if (!ev) return; setEditInfo({ dateKey, evIdx }); setEditLabel(ev.label); setEditTime(ev.time); setEditColor(ev.color); };
+  const openEditEvent = (dateKey, evIdx) => { const ev = events[dateKey]?.[evIdx]; if (!ev) return; setEditInfo({ dateKey, evIdx }); setEditLabel(ev.label); setEditTime(ev.time || ""); setEditColor(ev.color); };
   const saveEditEvent = () => {
-    if (!editInfo || !editLabel || !editTime) return;
+    if (!editInfo || !editLabel) return;
     const original = events[editInfo.dateKey]?.[editInfo.evIdx];
     const updated = { ...events };
     if (original?.rangeId) {
@@ -729,7 +729,7 @@ function CCCalendar() {
                           opacity: dragInfo && dragInfo.dateKey===key && dragInfo.evIdx===i ? 0.4 : 1,
                           overflow:"hidden", minWidth:0, maxWidth:"100%", boxSizing:"border-box",
                         }}>
-                        <div style={{ fontSize:8, fontWeight:800, opacity:0.85, marginBottom:1 }}>{ev.time}</div>
+                        {ev.time && <div style={{ fontSize:8, fontWeight:800, opacity:0.85, marginBottom:1 }}>{ev.time}</div>}
                         <div style={{ whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{ev.label}</div>
                       </div>
                     ))}
@@ -751,7 +751,7 @@ function CCCalendar() {
           <div style={{flex:1}}><label style={labelStyle}>Start Date</label><input type="date" style={inputStyle} value={newDate} onChange={e => setNewDate(e.target.value)} min="2026-08-01" max="2027-08-31" /></div>
           <div style={{flex:1}}><label style={labelStyle}>End Date</label><input type="date" style={inputStyle} value={newEndDate || newDate} onChange={e => setNewEndDate(e.target.value)} min={newDate || "2026-08-01"} max="2027-08-31" /></div>
         </div>
-        <div style={{marginBottom:14}}><label style={labelStyle}>Time</label><input style={inputStyle} value={newTime} onChange={e => setNewTime(e.target.value)} placeholder="e.g. 10:00 AM or 2:00 PM – 4:00 PM" /></div>
+        <div style={{marginBottom:14}}><label style={labelStyle}>Time (optional)</label><input style={inputStyle} value={newTime} onChange={e => setNewTime(e.target.value)} placeholder="e.g. 10:00 AM or 2:00 PM – 4:00 PM" /></div>
         <div style={{marginBottom:20}}><label style={labelStyle}>Color</label><div style={{display:"flex",flexWrap:"wrap",gap:8}}>
           {COLOR_OPTIONS.map(c => <div key={c.hex} onClick={() => setNewColor(c.hex)} style={{ width:32, height:32, borderRadius:8, background:c.hex, cursor:"pointer", border: newColor===c.hex ? "3px solid #2D3436" : "3px solid transparent" }} title={c.name} />)}
         </div></div>
@@ -762,7 +762,7 @@ function CCCalendar() {
       {showRecurring && <Modal title="Add Recurring Event" onClose={() => setShowRecurring(false)}>
         <div style={{marginBottom:14}}><label style={labelStyle}>Event Name</label><input style={inputStyle} value={recLabel} onChange={e => setRecLabel(e.target.value)} placeholder="e.g. Swimming Class" /></div>
         <div style={{marginBottom:14}}><label style={labelStyle}>Day of Week</label><select style={inputStyle} value={recDay} onChange={e => setRecDay(e.target.value)}>{DAY_OPTIONS.map(d => <option key={d} value={d}>{d}</option>)}</select></div>
-        <div style={{marginBottom:14}}><label style={labelStyle}>Time</label><input style={inputStyle} value={recTime} onChange={e => setRecTime(e.target.value)} placeholder="e.g. 10:00 AM or 2:00 PM – 4:00 PM" /></div>
+        <div style={{marginBottom:14}}><label style={labelStyle}>Time (optional)</label><input style={inputStyle} value={recTime} onChange={e => setRecTime(e.target.value)} placeholder="e.g. 10:00 AM or 2:00 PM – 4:00 PM" /></div>
         <div style={{display:"flex",gap:10,marginBottom:14}}>
           <div style={{flex:1}}><label style={labelStyle}>From</label><input type="date" style={inputStyle} value={recFrom} onChange={e => setRecFrom(e.target.value)} /></div>
           <div style={{flex:1}}><label style={labelStyle}>To</label><input type="date" style={inputStyle} value={recTo} onChange={e => setRecTo(e.target.value)} /></div>
@@ -792,7 +792,7 @@ function CCCalendar() {
       {/* EDIT EVENT */}
       {editInfo && <Modal title="Edit Event" onClose={() => setEditInfo(null)}>
         <div style={{marginBottom:14}}><label style={labelStyle}>Event Name</label><input style={inputStyle} value={editLabel} onChange={e => setEditLabel(e.target.value)} /></div>
-        <div style={{marginBottom:14}}><label style={labelStyle}>Time</label><input style={inputStyle} value={editTime} onChange={e => setEditTime(e.target.value)} /></div>
+        <div style={{marginBottom:14}}><label style={labelStyle}>Time (optional)</label><input style={inputStyle} value={editTime} onChange={e => setEditTime(e.target.value)} /></div>
         <div style={{marginBottom:20}}><label style={labelStyle}>Color</label><div style={{display:"flex",flexWrap:"wrap",gap:8}}>
           {COLOR_OPTIONS.map(c => <div key={c.hex} onClick={() => setEditColor(c.hex)} style={{ width:32,height:32,borderRadius:8,background:c.hex,cursor:"pointer",border: editColor===c.hex ? "3px solid #2D3436" : "3px solid transparent" }} title={c.name} />)}
         </div></div>
@@ -836,7 +836,7 @@ function CCCalendar() {
                   background:`${ev.color || "#2196F3"}15`, borderLeft:`4px solid ${ev.color || "#2196F3"}`, borderRadius:8, marginBottom:6 }}>
                   <div>
                     <div style={{fontSize:13,fontWeight:700,color:"#2D3436"}}>{ev.label}</div>
-                    <div style={{fontSize:11,fontWeight:600,color:"#636E72"}}>{ev.date} · {ev.time}</div>
+                    <div style={{fontSize:11,fontWeight:600,color:"#636E72"}}>{ev.date}{ev.time ? ` · ${ev.time}` : ""}</div>
                   </div>
                   <button onClick={() => removeParsedEvent(i)}
                     style={{ ...btnBase, background:"#FFE0E0", color:"#E74C3C", padding:"4px 10px", fontSize:11 }}>✕</button>
