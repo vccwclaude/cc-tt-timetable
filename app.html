@@ -472,6 +472,9 @@ function CCCalendar() {
   const [hasUnsaved, setHasUnsaved] = useState(false);
   const [saveStatus, setSaveStatus] = useState("");
   const [loadStatus, setLoadStatus] = useState("loading");
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [copiedEvent, setCopiedEvent] = useState(null);
+  const [shortcutMessage, setShortcutMessage] = useState("Click an event to select it. Double-click to edit. Ctrl+C to copy, then select a date and press Ctrl+V.");
   const [dragInfo, setDragInfo] = useState(null);
   const [dropTarget, setDropTarget] = useState(null);
   const [editInfo, setEditInfo] = useState(null);
@@ -534,6 +537,34 @@ function CCCalendar() {
   const selectedKey = selectedDate ? getKey(selectedDate) : null;
   const rangeFirst = rangeDrag ? [rangeDrag.start, rangeDrag.end].sort()[0] : null;
   const rangeLast = rangeDrag ? [rangeDrag.start, rangeDrag.end].sort()[1] : null;
+
+  useEffect(() => {
+    const isTyping = target => ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName) || target.isContentEditable;
+    const copySelected = e => {
+      if (isTyping(e.target) || !selectedEvent) return;
+      const event = events[selectedEvent.dateKey]?.[selectedEvent.evIdx];
+      if (!event) return;
+      e.preventDefault();
+      e.clipboardData?.setData("text/plain", event.label);
+      const { rangeId, rangeStart, rangeEnd, ...copy } = event;
+      setCopiedEvent(copy);
+      setShortcutMessage(`Copied "${event.label}". Select a date and press Ctrl+V.`);
+    };
+    const pasteCopied = e => {
+      if (isTyping(e.target) || !copiedEvent) return;
+      e.preventDefault();
+      if (!selectedKey) { setShortcutMessage("Select a destination date, then press Ctrl+V."); return; }
+      const updated = { ...events };
+      const pastedIndex = (updated[selectedKey] || []).length;
+      updated[selectedKey] = [...(updated[selectedKey] || []), { ...copiedEvent }];
+      updateEvents(updated);
+      setSelectedEvent({ dateKey:selectedKey, evIdx:pastedIndex });
+      setShortcutMessage(`Pasted "${copiedEvent.label}" to ${selectedKey}.`);
+    };
+    window.addEventListener("copy", copySelected);
+    window.addEventListener("paste", pasteCopied);
+    return () => { window.removeEventListener("copy", copySelected); window.removeEventListener("paste", pasteCopied); };
+  }, [selectedEvent, copiedEvent, selectedKey, events]);
 
   const addEvent = () => {
     if (!newLabel || !newDate) return;
@@ -607,7 +638,7 @@ function CCCalendar() {
       const list = [...(updated[editInfo.dateKey] || [])]; list.splice(editInfo.evIdx, 1);
       if (list.length === 0) delete updated[editInfo.dateKey]; else updated[editInfo.dateKey] = list;
     }
-    updateEvents(updated); setEditInfo(null);
+    updateEvents(updated); setEditInfo(null); setSelectedEvent(null);
   };
 
   // Parse handler
@@ -660,10 +691,11 @@ function CCCalendar() {
             {saveStatus === "saving" ? "⏳ Saving..." : saveStatus === "saved" ? "✓ Synced!" : saveStatus === "error" ? "✕ Error" : hasUnsaved ? "☁️ Save to Cloud" : "☁️ Synced"}
           </button>
         </div>
+        <div style={{ textAlign:"center", fontSize:11, fontWeight:600, color:"#636E72", margin:"-10px 0 16px" }}>{shortcutMessage}</div>
 
         <div className="month-btns" style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:8, marginBottom:24 }}>
           {MONTHS.map((m, i) => !isMonthFullyPast(m) && (
-            <button key={m.name} onClick={() => { setActiveMonth(i); setSelectedDate(null); }}
+            <button key={m.name} onClick={() => { setActiveMonth(i); setSelectedDate(null); setSelectedEvent(null); }}
               style={{ ...btnBase, padding:"10px 28px", fontSize:15,
                 background: activeMonth === i ? "linear-gradient(135deg, #FF9A56, #FF6B6B)" : "#fff",
                 color: activeMonth === i ? "#fff" : "#636E72",
@@ -698,8 +730,8 @@ function CCCalendar() {
                 <div key={key} data-date={key}
                   onPointerDown={e => handleRangeStart(e, key)}
                   onPointerEnter={() => handleRangeEnter(key)}
-                  onClick={() => { if (rangeDragged.current) { rangeDragged.current = false; return; } setSelectedDate(isSel ? null : date); }}
-                  onDoubleClick={() => { setNewDate(key); setNewEndDate(""); setShowAddEvent(true); }}
+                  onClick={() => { if (rangeDragged.current) { rangeDragged.current = false; return; } setSelectedEvent(null); setSelectedDate(isSel ? null : date); }}
+                  onDoubleClick={() => { setSelectedEvent(null); setNewDate(key); setNewEndDate(""); setShowAddEvent(true); }}
                   onDragOver={e => handleDragOver(e, key)}
                   onDragLeave={handleDragLeave}
                   onDrop={e => handleDrop(e, key)}
@@ -716,17 +748,21 @@ function CCCalendar() {
                   <div style={{ display:"flex", flexDirection:"column", gap:4, minWidth:0, width:"100%" }}>
                     {evs.map((ev, i) => (
                       <div key={i}
+                        role="button" tabIndex={0} aria-pressed={selectedEvent?.dateKey===key && selectedEvent.evIdx===i}
                         draggable={!isPast && !ev.rangeId}
                         onPointerDown={e => e.stopPropagation()}
+                        onClick={e => { e.stopPropagation(); setSelectedEvent({ dateKey:key, evIdx:i }); setSelectedDate(date); }}
+                        onKeyDown={e => { if (e.key==="Enter" || e.key===" ") { e.preventDefault(); setSelectedEvent({ dateKey:key, evIdx:i }); setSelectedDate(date); } }}
                         onDragStart={e => { e.stopPropagation(); handleDragStart(e, key, i); }}
                         onDragEnd={handleDragEnd}
-                        onDoubleClick={e => { e.stopPropagation(); if (!isPast) openEditEvent(key, i); }}
+                        onDoubleClick={e => { e.stopPropagation(); openEditEvent(key, i); }}
                         style={{
                           fontSize:9, fontWeight:700, background: isPast ? "#CCCCCC" : ev.color, color: isPast ? "#999" : "#fff",
                           borderRadius:4, padding:"3px 4px", textAlign:"center", lineHeight:1.2,
                           textShadow: isPast ? "none" : "0 1px 2px rgba(0,0,0,0.15)",
-                          cursor: isPast || ev.rangeId ? "default" : "grab",
+                          cursor: isPast || ev.rangeId ? "pointer" : "grab",
                           opacity: dragInfo && dragInfo.dateKey===key && dragInfo.evIdx===i ? 0.4 : 1,
+                          outline: selectedEvent?.dateKey===key && selectedEvent.evIdx===i ? "3px solid #2D3436" : "none", outlineOffset:1,
                           overflow:"hidden", minWidth:0, maxWidth:"100%", boxSizing:"border-box",
                         }}>
                         {ev.time && <div style={{ fontSize:8, fontWeight:800, opacity:0.85, marginBottom:1 }}>{ev.time}</div>}
@@ -807,7 +843,7 @@ function CCCalendar() {
         {!parsedEvents ? (
           <div>
             <div style={{fontSize:12,color:"#636E72",fontWeight:600,marginBottom:12}}>
-              Paste a WhatsApp message, email, or schedule. Put one event per line with a date, time, and name.
+              Paste a WhatsApp message, email, or schedule. Put one event per line with a date and name; time is optional.
             </div>
             <div style={{fontSize:11,color:"#E74C3C",fontWeight:600,marginBottom:8,lineHeight:1.5}}>
               Examples that work well:<br/>
