@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>CC and TT's Timetable</title>
+  <rect x="4" y="10" width="56" height="50" rx="12" fill="#fffaf0" stroke="#344b52" stroke-width="4"/>
+  <path d="M16 10h32a10 10 0 0 1 10 10v6H6v-6a10 10 0 0 1 10-10Z" fill="#55b7b0"/>
+  <path d="M20 5v12M44 5v12" stroke="#344b52" stroke-width="6" stroke-linecap="round"/>
+  <path d="M32 51 20 40c-8-8 4-18 12-9 8-9 20 1 12 9Z" fill="#ef7b85"/>
+</svg>
