@@ -1,0 +1,15 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const html = fs.readFileSync('app.html', 'utf8');
+const source = html.slice(html.indexOf('function stampEventUpdates('), html.indexOf('function parseTextToEvents('));
+const stamp = vm.runInNewContext(source + '; stampEventUpdates');
+const original = { label: 'Class', time: '', color: '#fff', updatedAt: 10 };
+const before = { '2026-10-14': [original] };
+assert.equal(stamp(before, before, 20)['2026-10-14'][0].updatedAt, 10);
+assert.equal(stamp(before, { '2026-10-14': [{ ...original, label: 'New name' }] }, 20)['2026-10-14'][0].updatedAt, 20);
+assert.equal(stamp(before, { '2026-10-14': [original, original] }, 20)['2026-10-14'][1].updatedAt, 20);
+assert.equal(stamp(before, { '2026-10-15': [original] }, 20)['2026-10-15'][0].updatedAt, 20);
+assert.equal(Object.keys(stamp(before, {}, 20)).length, 0);
+assert.equal(original.updatedAt, 10);
+console.log('Update timestamps: unchanged, edited, copied, moved and deleted events passed.');
