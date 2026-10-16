@@ -13,3 +13,15 @@ assert.equal(stamp(before, { '2026-10-15': [original] }, 20)['2026-10-15'][0].up
 assert.equal(Object.keys(stamp(before, {}, 20)).length, 0);
 assert.equal(original.updatedAt, 10);
 console.log('Update timestamps: unchanged, edited, copied, moved and deleted events passed.');
+const summarize = vm.runInNewContext(html.slice(html.indexOf('function summarizeUpdates('), html.indexOf('function LatestUpdates(')) + '; summarizeUpdates');
+const data = Object.fromEntries([16,17,18,19,20].map(day => ['2026-11-' + day, [{label:'eng test', updatedAt:10}]]));
+assert.equal(summarize(data).length, 1);
+assert.match(summarize(data)[0].dateSummary, /16.*20 Nov 2026/);
+delete data['2026-11-18'];
+assert.match(summarize(data)[0].dateSummary, /16.*17 Nov 2026; 19.*20 Nov 2026/);
+data['2026-11-20'].push({label:'eng test', time:'10am', updatedAt:30});
+assert.equal(summarize(data).length, 2);
+assert.equal(summarize(data)[0].time, '10am');
+assert.equal(summarize({'2026-11-01': [{label:'old'}]}).length, 0);
+assert.match(summarize({'2026-12-31':[{label:'trip',updatedAt:1}], '2027-01-01':[{label:'trip',updatedAt:2}]} )[0].dateSummary, /2026.*2027/);
+console.log('Update summaries: date ranges, gaps, different times and year boundaries passed.');

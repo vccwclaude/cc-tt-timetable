@@ -259,10 +259,33 @@ function Modal({ title, onClose, children }) {
   );
 }
 
+function summarizeUpdates(events) {
+  const groups = new Map();
+  Object.entries(events).forEach(([date, items]) => items.forEach(event => {
+    if (!event.updatedAt) return;
+    const key = JSON.stringify([event.label, event.time || ""]);
+    if (!groups.has(key)) groups.set(key, { ...event, dates: new Set() });
+    const group = groups.get(key);
+    group.dates.add(date);
+    group.updatedAt = Math.max(group.updatedAt, event.updatedAt);
+  }));
+  const formatter = new Intl.DateTimeFormat("en-GB", { day:"numeric", month:"short", year:"numeric", timeZone:"UTC" });
+  const asDate = date => new Date(date + "T12:00:00Z");
+  return [...groups.values()].sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 5).map(group => {
+    const ranges = [];
+    [...group.dates].sort().forEach(date => {
+      const last = ranges[ranges.length - 1];
+      if (last && asDate(date) - asDate(last[1]) === 86400000) last[1] = date;
+      else ranges.push([date, date]);
+    });
+    return { ...group, date: ranges[0][0], dateSummary: ranges.map(([start, end]) =>
+      start === end ? formatter.format(asDate(start)) : formatter.formatRange(asDate(start), asDate(end))
+    ).join("; ") };
+  });
+}
+
 function LatestUpdates({ events }) {
-  const recent = Object.entries(events).flatMap(([date, items]) =>
-    items.filter(event => event.updatedAt).map(event => ({ ...event, date }))
-  ).sort((a, b) => b.updatedAt - a.updatedAt || a.date.localeCompare(b.date)).slice(0, 5);
+  const recent = summarizeUpdates(events);
   return (
     <aside className="latest-updates" aria-label="Latest calendar updates">
       <h2 style={{ margin:"0 0 12px", fontSize:18, color:"#344b52" }}>Latest updates</h2>
@@ -271,7 +294,7 @@ function LatestUpdates({ events }) {
         : <ul style={{ listStyle:"none", padding:0, margin:0 }}>
           {recent.map((event, index) => <li key={event.date + "-" + index} style={{ padding:"10px 0", borderTop:"1px solid #e9eeee", overflowWrap:"anywhere" }}>
             <strong style={{ display:"block", fontSize:14, color:"#2D3436" }}>{event.label}</strong>
-            <span style={{ display:"block", fontSize:12, color:"#636E72" }}>{new Date(event.date + "T12:00:00").toLocaleDateString("en-GB", { day:"numeric", month:"short", year:"numeric" })}{event.time ? " · " + event.time : ""}</span>
+            <span style={{ display:"block", fontSize:12, color:"#636E72" }}>{event.dateSummary}{event.time ? " · " + event.time : ""}</span>
             <small style={{ display:"block", marginTop:4, color:"#636E72" }}>Updated {new Date(event.updatedAt).toLocaleString("en-GB", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" })}</small>
           </li>)}
         </ul>}
