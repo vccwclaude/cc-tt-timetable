@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-Hant-HK">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="比較香港本地小學的課程、教學語言、學費與升中安排，查看銜接中學的 IB、DSE 及 A-Level 路線。">
+  <meta name="theme-color" content="#f7f9fc">
+  <title>香港小學升中路線比較</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <header class="site-header shell">
+    <a class="brand" href="./" aria-label="香港小學升中路線比較首頁"><span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M4 13 16 5l12 8M7 12v15h18V12M13 27v-8h6v8M11 14h2m6 0h2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>小學・升中路線</span></a>
+    <nav aria-label="主要導覽"><a href="#schools">學校比較</a><a href="#guide">選校要點</a></nav>
+  </header>
+  <main class="shell">
+    <section class="intro" aria-labelledby="page-title">
+      <div><p class="eyebrow">香港本地小學</p><h1 id="page-title">由小學，看到中學的選擇。</h1><p class="intro-copy">把課程、語言、學費與升中安排放在一起，找出適合孩子的路線。</p></div>
+      <div class="intro-meta"><span id="dataset-count">載入學校資料…</span><span>資料整理 <time datetime="2026-10-17">17.10.2026</time></span></div>
+    </section>
+    <section class="search-panel" aria-label="學校篩選">
+      <div class="presets" id="presets" aria-label="常用篩選">
+        <button type="button" data-preset="all" class="preset active">全部學校</button>
+        <button type="button" data-preset="island" class="preset">港島小學</button>
+        <button type="button" data-preset="ib" class="preset">可銜接 IBDP</button>
+        <button type="button" data-preset="through-ib" class="preset">同校／一條龍＋IBDP</button>
+        <button type="button" data-preset="alevel" class="preset">A-Level 路線</button>
+        <button type="button" data-preset="pyp" class="preset">PYP 小學</button>
+      </div>
+      <form id="filters" autocomplete="off">
+        <div class="search-row"><label class="search-box"><span class="sr-only">搜尋學校、地區或中學名稱</span><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input type="search" id="query" name="query" placeholder="搜尋小學、中學、地址或關鍵字"></label><button type="submit" class="button primary">搜尋</button><button type="button" id="reset" class="button subtle">重設</button></div>
+        <div class="filter-grid">
+          <label>地區<select id="region" name="region"><option value="">全港</option><option>香港島</option><option>九龍</option><option>新界</option></select></label>
+          <label>行政區<select id="district" name="district"><option value="">全部行政區</option></select></label>
+          <label>學校類別<select id="type" name="type"><option value="">全部類別</option><option>直資</option><option>私立</option><option>私立獨立</option><option>資助</option><option>官立</option></select></label>
+          <label>報讀對象<select id="gender" name="gender"><option value="">全部</option><option value="boys">男生可報</option><option value="girls">女生可報</option><option value="coed">只看男女校</option></select></label>
+          <label>升中安排<select id="relation" name="relation"><option value="">全部安排</option><option value="through">一條龍</option><option value="continuous">同校一貫／銜接</option><option value="group">同系銜接安排</option><option value="direct">直屬</option><option value="linked">聯繫</option><option value="priority">優先面試／評核</option><option value="none">沒有正式銜接</option></select></label>
+          <label>中學課程<select id="programme" name="programme"><option value="">全部課程</option><option value="IBDP">IBDP</option><option value="MYP">IB MYP</option><option value="DSE">DSE</option><option value="A-Level">完整 A-Level／IAL 路線</option><option value="IAL補充">IAL 補充課程</option><option value="IGCSE">IGCSE</option></select></label>
+        </div>
+        <details class="advanced"><summary>語言、PYP 及學費篩選</summary><div class="advanced-grid">
+          <label>主要教學語言<select id="language" name="language"><option value="">全部語言安排</option><option>中文為主</option><option>英文為主</option><option>中英雙語</option></select></label>
+          <label>小學 PYP<select id="pyp" name="pyp"><option value="">不限</option><option value="yes">有正式 PYP</option><option value="no">非 PYP／未列 PYP</option></select></label>
+          <div class="fee-control"><label for="feeMax">小一年費上限 <output id="fee-output" for="feeMax">不限</output></label><input id="feeMax" name="feeMax" type="range" min="0" max="300000" step="1000" value="300000"><label class="checkbox-line"><input type="checkbox" id="includeUnknown" name="includeUnknown" checked>包括學費待核實的學校</label></div>
+        </div></details>
+        <div class="criteria-line"><span class="criteria-label">目前條件</span><div id="criteria" aria-live="polite">全部學校</div></div>
+      </form>
+    </section>
+    <section id="schools" class="results" aria-labelledby="results-title">
+      <div class="results-toolbar"><div><h2 id="results-title">學校列表 <span id="result-count" class="count"></span></h2><p id="route-context" class="route-context">中學有 IBDP 課程，仍須留意升中及校內分流條件。</p></div><div class="results-actions"><label class="sort-label"><span class="sr-only">排序</span><select id="sort"><option value="name">學校名稱</option><option value="fee-low">小一年費由低至高</option><option value="fee-high">小一年費由高至低</option></select></label><button id="export" type="button" class="button outline">匯出結果</button></div></div>
+      <div id="loading" class="empty-state" role="status">正在載入學校資料…</div>
+      <div id="empty" class="empty-state" hidden><h3>暫時沒有符合的學校</h3><p>試試放寬地區、升中安排或學費條件。</p><button class="button outline" id="empty-reset">重設篩選</button></div>
+      <div class="table-wrap" id="table-wrap" hidden><table class="school-table"><thead><tr><th class="select-column">比較</th><th>小學</th><th>類別／性別</th><th>小學課程及語言</th><th>升中安排</th><th>中學課程</th><th>小一年費</th><th><span class="sr-only">詳細資料</span></th></tr></thead><tbody id="school-rows"></tbody></table></div>
+    </section>
+    <section id="guide" class="guide" aria-labelledby="guide-title"><div class="section-heading"><p class="eyebrow">多想一步</p><h2 id="guide-title">除了校名，還要看甚麼？</h2></div><div class="guide-grid">
+      <details><summary>升中有銜接，是否等於保證讀 IB？</summary><p>先看升中關係，再看中學的課程分流。問清楚 IB 名額、成績及操行門檻、可選科目，以及未能入讀 IB 時的替代路線。沒有 PYP 的小學，也可以銜接提供 IBDP 的中學。</p></details>
+      <details><summary>一條龍、直屬、聯繫有何分別？</summary><p>一條龍、直屬、聯繫及同系優先面試是不同安排。直屬或聯繫不代表人人獲取錄；報讀其他中學亦可能影響原有銜接資格。直資及私立學校的具體條件，須看個別學校公布。</p><p><a href="https://www.edb.gov.hk/tc/edu-system/primary-secondary/applicable-to-primary-secondary/through-train/sch-list.html" target="_blank" rel="noopener noreferrer">教育局一條龍安排</a> · <a href="https://www.edb.gov.hk/attachment/tc/edu-system/primary-secondary/spa-systems/secondary-spa/general-info/FAQ_SSPA_2026_Sept_General_TC.pdf" target="_blank" rel="noopener noreferrer">升中安排常見問題（2026入學）</a></p></details>
+      <details><summary>PYP、MYP、DP，要全部讀過嗎？</summary><p>PYP 是小學階段，MYP 是初中至中學階段，DP 是高中兩年課程。把「現在讀甚麼」與「將來可選甚麼」分開看，並核對銜接年、IGCSE 或校本課程的安排。</p><p><a href="https://ibo.org/programmes" target="_blank" rel="noopener noreferrer">IB 官方課程介紹</a></p></details>
+      <details><summary>教學語言與孩子的學習方式</summary><p>英文為主不等於每科都用英文；普通話教中文也可能按年級不同。除了語言比例，亦問功課量、閱讀寫作要求、評估方式、學習支援及家校溝通。</p></details>
+      <details><summary>別只看排名或最高分</summary><p>本表不編製綜合名次。比較學校公布的成績時，同時看應考人數、平均或中位數、完整文憑比例，以及入讀該課程前的遴選條件。</p></details>
+      <details><summary>學費以外的時間和成本</summary><p>小一年費只是起點。另查各年級加費、校車、午膳、活動、建校費或債券，以及高中 IB／A-Level 費用。把每天實際通勤時間、接送及課後安排一併考慮。</p></details>
+    </div></section>
+  </main>
+  <aside id="compare-tray" class="compare-tray" hidden aria-label="已選學校"><div class="shell tray-inner"><div><strong id="compare-count">已選0校</strong><span id="compare-names"></span></div><div class="tray-actions"><button type="button" id="clear-comparison" class="button subtle">清除</button><button type="button" id="open-comparison" class="button primary">並排比較</button></div></div></aside>
+  <dialog id="detail-dialog" aria-labelledby="detail-title"><div id="detail-content"></div></dialog>
+  <dialog id="comparison-dialog" class="comparison-dialog" aria-labelledby="comparison-title"><div class="dialog-header"><div><p class="eyebrow">最多4校</p><h2 id="comparison-title">並排比較</h2></div><button type="button" data-close-dialog class="close-button" aria-label="關閉比較">×</button></div><div id="comparison-content" class="comparison-content"></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

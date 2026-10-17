@@ -1,0 +1,1745 @@
+{
+  "asOf": "2026-10-17",
+  "scope": "本地男校及男女校小學；VSA及ISF另列為私立獨立選項。",
+  "schools": [
+    {
+      "id": "spccps",
+      "name": "聖保羅男女中學附屬小學",
+      "en": "SPCCPS St Paul Co educational College Primary School",
+      "region": "香港島",
+      "district": "南區",
+      "type": "直資",
+      "gender": "男女",
+      "address": "黃竹坑南風徑11號",
+      "primaryCurriculum": "本地課程及校本延伸",
+      "primaryYears": "P1–P6（6年小學）",
+      "pyp": false,
+      "language": "中文為主要教學語言，重視中英文及兩文三語",
+      "languageMode": "中文為主",
+      "relation": "through",
+      "relationLabel": "一條龍",
+      "secondaries": [
+        {
+          "name": "聖保羅男女中學",
+          "type": "直資",
+          "gender": "男女",
+          "junior": "本地初中",
+          "myp": false,
+          "senior": "DSE 或 IBDP",
+          "programmes": [
+            "IBDP",
+            "DSE"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 85700,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "P1–3：HK$85,700；P4：HK$82,200；P5–6：HK$77,300。",
+        "note": "直資本地學生全年學費。",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "一條龍升中不等於保證入讀 IB 班。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=246",
+          "year": "2026/27"
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://www.spcc.edu.hk/academic/curriculum/ibdp"
+        },
+        {
+          "label": "小學學費",
+          "url": "https://www.spcc.edu.hk/page/detail/1085",
+          "year": "2026/27"
+        }
+      ],
+      "verifiedAt": "2026-10-11",
+      "added": false
+    },
+    {
+      "id": "dbspd",
+      "name": "拔萃男書院附屬小學",
+      "en": "DBSPD Diocesan Boys School Primary Division",
+      "region": "九龍",
+      "district": "九龍城區",
+      "type": "直資",
+      "gender": "男",
+      "address": "旺角亞皆老街131號",
+      "primaryCurriculum": "本地及校本課程",
+      "primaryYears": "P1–P6（6年小學）",
+      "pyp": false,
+      "language": "英文為主，另設中文課程",
+      "languageMode": "英文為主",
+      "relation": "through",
+      "relationLabel": "一條龍",
+      "secondaries": [
+        {
+          "name": "拔萃男書院",
+          "type": "直資",
+          "gender": "男",
+          "junior": "本地初中；G10 設 IB 銜接年",
+          "myp": false,
+          "senior": "DSE；G11–12 IBDP",
+          "programmes": [
+            "IBDP",
+            "DSE"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 60630,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "G1–6：HK$60,630。",
+        "note": "",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "G10 IB 銜接年不是 MYP，IB 路線另有遴選。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=3&sch_id=78",
+          "year": "2026/27"
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://www.ib.dbs.edu.hk/g10"
+        },
+        {
+          "label": "補充官方資料",
+          "url": "https://www.ib.dbs.edu.hk/admission-g10"
+        },
+        {
+          "label": "小學學費",
+          "url": "https://www.dbs.edu.hk/index.php?m=schoolfee&s=admission",
+          "year": "2026/27"
+        }
+      ],
+      "verifiedAt": "2026-10-11",
+      "added": false
+    },
+    {
+      "id": "gt",
+      "name": "優才（楊殷有娣）書院小學部",
+      "en": "GT Gifted Education",
+      "region": "九龍",
+      "district": "油尖旺區／西貢區",
+      "type": "直資",
+      "gender": "男女",
+      "address": "初小：旺角洗衣街31號\n高小：將軍澳嶺光街10號",
+      "primaryCurriculum": "本地及校本資優、才華教育",
+      "primaryYears": "P1–P6（6年小學）",
+      "pyp": false,
+      "language": "中文及英文，按科目安排",
+      "languageMode": "中英雙語",
+      "relation": "through",
+      "relationLabel": "一條龍",
+      "secondaries": [
+        {
+          "name": "優才（楊殷有娣）書院中學部",
+          "type": "直資",
+          "gender": "男女",
+          "junior": "本地及校本初中",
+          "myp": false,
+          "senior": "DSE 或 IBDP",
+          "programmes": [
+            "IBDP",
+            "DSE"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 35310,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "P1–2：HK$35,310；P3–4：HK$37,510；P5–6：HK$39,600。",
+        "note": "校方分級收費表仍註有待教育局審批；概覽已列小一HK$35,310。",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "G9 有高中分流政策，按學業及操行等條件遴選。",
+        "初小在旺角，高小在將軍澳；地區篩選另支援兩個校區。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=228",
+          "year": "2026/27"
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://www.gtcollege.edu.hk/g9-streaming-policy-2/"
+        },
+        {
+          "label": "補充官方資料",
+          "url": "https://main.gtschool.hk/admission/g1-2728/"
+        },
+        {
+          "label": "小學學費",
+          "url": "https://main.gtschool.hk/intro/tuition/",
+          "year": "2026/27"
+        }
+      ],
+      "verifiedAt": "2026-10-11",
+      "added": false,
+      "regions": [
+        "九龍",
+        "新界"
+      ]
+    },
+    {
+      "id": "logos",
+      "name": "香港華人基督教聯會真道書院小學部",
+      "en": "Logos Academy",
+      "region": "新界",
+      "district": "西貢區",
+      "type": "直資",
+      "gender": "男女",
+      "address": "將軍澳嶺光街5號",
+      "primaryCurriculum": "校本課程，11年一貫學制",
+      "primaryYears": "FS1–2、DS1–3（5個校內學年；全校11年制）",
+      "pyp": false,
+      "language": "中文（包括普通話）及英文",
+      "languageMode": "中英雙語",
+      "relation": "through",
+      "relationLabel": "一條龍",
+      "secondaries": [
+        {
+          "name": "香港華人基督教聯會真道書院中學部",
+          "type": "直資",
+          "gender": "男女",
+          "junior": "校本初中",
+          "myp": false,
+          "senior": "DSE 或 IBDP",
+          "programmes": [
+            "IBDP",
+            "DSE"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 28600,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "FS1–2、DS1–3：HK$28,600，分10期。",
+        "note": "",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "採11年一貫學制，須留意與一般12年學制的年級銜接。",
+        "DS3對照一般小五／六，DS4對照中一。IB校內分流門檻須向校方確認。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=230",
+          "year": "2026/27"
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://www.logosacademy.edu.hk/en/node/115"
+        },
+        {
+          "label": "小學階段及插班年級對照",
+          "url": "https://www.logosacademy.edu.hk/tc/node/111"
+        }
+      ],
+      "verifiedAt": "2026-10-11",
+      "added": false
+    },
+    {
+      "id": "lutheran",
+      "name": "基督教香港信義會宏信書院小學部",
+      "en": "ELCHK Lutheran Academy LA",
+      "region": "新界",
+      "district": "元朗區",
+      "type": "直資",
+      "gender": "男女",
+      "address": "元朗欖口村路25號",
+      "primaryCurriculum": "正式 IB PYP 結合校本內容",
+      "primaryYears": "Y1–Y6（IB PYP）",
+      "pyp": true,
+      "language": "英文為主，另設中文課程",
+      "languageMode": "英文為主",
+      "relation": "through",
+      "relationLabel": "一條龍",
+      "secondaries": [
+        {
+          "name": "基督教香港信義會宏信書院中學部",
+          "type": "直資",
+          "gender": "男女",
+          "junior": "Y7–9 IB MYP，Y10選高中路線",
+          "myp": true,
+          "senior": "DSE 或 IBDP；DSE理科生可額外修讀IAL",
+          "programmes": [
+            "MYP",
+            "IBDP",
+            "DSE",
+            "IAL補充"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 87910,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "Y1–5：HK$87,910；Y6：HK$84,500，分10期。",
+        "note": "",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "提供 PYP、MYP、DP；高中另有 DSE 路線。",
+        "IAL屬DSE以外加修安排。IBDP另須學習檔案、項目、學生會議、學習者特質及CAS等證據。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=506",
+          "year": "2026/27"
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://ibo.org/school/006551/"
+        },
+        {
+          "label": "補充官方資料",
+          "url": "https://www.luac.edu.hk/admissions/"
+        },
+        {
+          "label": "宏信課程及IAL安排",
+          "url": "https://www.luac.edu.hk/la-curriculum/"
+        }
+      ],
+      "verifiedAt": "2026-10-17",
+      "added": false
+    },
+    {
+      "id": "cky",
+      "name": "保良局蔡繼有學校小學部",
+      "en": "Po Leung Kuk Choi Kai Yau CKY",
+      "region": "九龍",
+      "district": "深水埗區",
+      "type": "私立獨立",
+      "gender": "男女",
+      "address": "九龍琵琶山郝德傑道6號",
+      "primaryCurriculum": "中英雙語校本課程",
+      "primaryYears": "Y1–Y5（5個校內學年）",
+      "pyp": false,
+      "language": "英文及普通話",
+      "languageMode": "中英雙語",
+      "relation": "continuous",
+      "relationLabel": "同校一貫／銜接",
+      "secondaries": [
+        {
+          "name": "保良局蔡繼有學校中學部",
+          "type": "私立獨立",
+          "gender": "男女",
+          "junior": "Y1–8 校本課程",
+          "myp": false,
+          "senior": "Y9–10 IGCSE；Y11–12 IBDP",
+          "programmes": [
+            "IBDP",
+            "IGCSE"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 108801,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "小學Y1–5：HK$108,801，分11期。",
+        "note": "Y6–8屬中學收費帶HK$141,460，不混入小學年費。",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "小學不是 PYP，初中不是 MYP；高中經 IGCSE 銜接 IBDP。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://internationalschools.edb.gov.hk/tc/schools/90.html",
+          "year": null
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://www.cky.edu.hk/en/site/view?name=igcse-results-2026"
+        },
+        {
+          "label": "小學學費",
+          "url": "https://www.cky.edu.hk/en/site/view?name=School+Fees",
+          "year": "2026/27"
+        }
+      ],
+      "verifiedAt": "2026-10-11",
+      "added": false
+    },
+    {
+      "id": "sthilary",
+      "name": "德萃小學",
+      "en": "St Hilary Primary",
+      "region": "新界",
+      "district": "大埔區",
+      "type": "私立",
+      "gender": "男女",
+      "address": "大埔運頭街6號",
+      "primaryCurriculum": "校本課程",
+      "primaryYears": "G1–G6",
+      "pyp": false,
+      "language": "英文及普通話",
+      "languageMode": "中英雙語",
+      "relation": "group",
+      "relationLabel": "同系銜接安排",
+      "secondaries": [
+        {
+          "name": "大光德萃書院",
+          "type": "私立",
+          "gender": "男女",
+          "junior": "G7–8 校本課程",
+          "myp": false,
+          "senior": "G9–10 IGCSE；G11–12 IBDP 或 A-Level",
+          "programmes": [
+            "IBDP",
+            "A-Level",
+            "IGCSE"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 106128,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "G1–6：HK$106,128（HK$9,648 × 11期）。",
+        "note": "教育局收費證明書2026-09-01生效。",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "按校方同系銜接安排；須確認所屬小學校區、升中及課程遴選條件。",
+        "校方2022年文件稱G6畢業生獲提供大光德萃學位；現行各校區條款須確認，不能當作最新無條件IB保證。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://www.sthilarys.edu.hk/admissions/school-fees/",
+          "year": null
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://tkhc.edu.hk/academics_curriculum-structure/"
+        },
+        {
+          "label": "補充官方資料",
+          "url": "https://ibo.org/en/school/062352/"
+        },
+        {
+          "label": "小學學費",
+          "url": "https://applications.edb.gov.hk/schoolsearch/schoolfee/603600.pdf",
+          "year": "2026/27"
+        },
+        {
+          "label": "同系直升安排（2022年文件）",
+          "url": "https://www.sthilarys.edu.hk/wp-content/uploads/2022/01/ps_ss_5_1small.pdf",
+          "year": "2022"
+        }
+      ],
+      "verifiedAt": "2026-10-11",
+      "added": false
+    },
+    {
+      "id": "vnsaa",
+      "name": "漢師德萃學校",
+      "en": "VNSAA St Hilary",
+      "region": "九龍",
+      "district": "油尖旺區",
+      "type": "私立",
+      "gender": "男女",
+      "address": "旺角洗衣街22號",
+      "primaryCurriculum": "校本課程",
+      "primaryYears": "G1–G6",
+      "pyp": false,
+      "language": "英文及普通話",
+      "languageMode": "中英雙語",
+      "relation": "group",
+      "relationLabel": "同系銜接安排",
+      "secondaries": [
+        {
+          "name": "大光德萃書院",
+          "type": "私立",
+          "gender": "男女",
+          "junior": "G7–8 校本課程",
+          "myp": false,
+          "senior": "G9–10 IGCSE；G11–12 IBDP 或 A-Level",
+          "programmes": [
+            "IBDP",
+            "A-Level",
+            "IGCSE"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 106128,
+        "year": "學年待確認",
+        "yearConfirmed": false,
+        "bands": "現行校網G1–6：HK$106,128（HK$9,648 × 11期）。",
+        "note": "官網未列學年；工具取得的教育局證書仍為2025-09-01起HK$100,309。教材費另列HK$4,200 × 2。",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "按校方同系銜接安排；須確認所屬小學校區、升中及課程遴選條件。",
+        "校方2022年文件稱G6畢業生獲提供大光德萃學位；現行各校區條款須確認，不能當作最新無條件IB保證。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://www.sthilarys.edu.hk/contact-us/",
+          "year": null
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://tkhc.edu.hk/academics_curriculum-structure/"
+        },
+        {
+          "label": "補充官方資料",
+          "url": "https://ibo.org/en/school/062352/"
+        },
+        {
+          "label": "小學學費",
+          "url": "https://vnsaasthilarys.edu.hk/admissions/school-fees/",
+          "year": "學年待確認"
+        },
+        {
+          "label": "同系直升安排（2022年文件）",
+          "url": "https://www.sthilarys.edu.hk/wp-content/uploads/2022/01/ps_ss_5_1small.pdf",
+          "year": "2022"
+        }
+      ],
+      "verifiedAt": "2026-10-11",
+      "added": false
+    },
+    {
+      "id": "aog",
+      "name": "神召會德萃書院小學部",
+      "en": "AOG St Hilary",
+      "region": "九龍",
+      "district": "黃大仙區",
+      "type": "私立",
+      "gender": "男女",
+      "address": "慈雲山蒲崗村道91號（校方稱鑽石山校）",
+      "primaryCurriculum": "校本課程",
+      "primaryYears": "G1–G6",
+      "pyp": false,
+      "language": "英文及普通話",
+      "languageMode": "中英雙語",
+      "relation": "group",
+      "relationLabel": "同系銜接安排",
+      "secondaries": [
+        {
+          "name": "大光德萃書院",
+          "type": "私立",
+          "gender": "男女",
+          "junior": "G7–8 校本課程",
+          "myp": false,
+          "senior": "G9–10 IGCSE；G11–12 IBDP 或 A-Level",
+          "programmes": [
+            "IBDP",
+            "A-Level",
+            "IGCSE"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 106128,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "P1–6：HK$106,128（HK$9,648 × 11期）。",
+        "note": "教育局收費證明書第4頁，2026-09-01生效。",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "按校方同系銜接安排；須確認所屬小學校區、升中及課程遴選條件。",
+        "校方2022年文件稱G6畢業生獲提供大光德萃學位；現行各校區條款須確認，不能當作最新無條件IB保證。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://www.sthilarys.edu.hk/contact-us/",
+          "year": null
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://tkhc.edu.hk/academics_curriculum-structure/"
+        },
+        {
+          "label": "補充官方資料",
+          "url": "https://ibo.org/en/school/062352/"
+        },
+        {
+          "label": "小學學費",
+          "url": "https://applications.edb.gov.hk/schoolsearch/schoolfee/216224.pdf",
+          "year": "2026/27"
+        },
+        {
+          "label": "同系直升安排（2022年文件）",
+          "url": "https://www.sthilarys.edu.hk/wp-content/uploads/2022/01/ps_ss_5_1small.pdf",
+          "year": "2022"
+        }
+      ],
+      "verifiedAt": "2026-10-11",
+      "added": false
+    },
+    {
+      "id": "yingwa",
+      "name": "英華小學",
+      "en": "Ying Wa Primary School",
+      "region": "九龍",
+      "district": "深水埗區",
+      "type": "直資",
+      "gender": "男",
+      "address": "深水埗英華街3號",
+      "primaryCurriculum": "本地課程及校本延伸",
+      "primaryYears": "P1–P6（6年小學）",
+      "pyp": false,
+      "language": "中文為主，英文科以英文教授",
+      "languageMode": "中文為主",
+      "relation": "through",
+      "relationLabel": "一條龍",
+      "secondaries": [
+        {
+          "name": "英華書院",
+          "type": "直資",
+          "gender": "男",
+          "junior": "本地初中課程",
+          "myp": false,
+          "senior": "DSE；另一選擇為S4 DSE／IGCSE混合班，S5–6 IAL",
+          "programmes": [
+            "DSE",
+            "A-Level",
+            "IGCSE"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 19700,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "全年HK$19,700，校方列分10期。",
+        "note": "",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "中學設 DSE 及 IAL 路線，未有 IBDP。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=276",
+          "year": "2026/27"
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://www.yingwa.edu.hk/school-news.php?n=888"
+        },
+        {
+          "label": "小學學費",
+          "url": "https://www.yingwaps.edu.hk/tc/content.php?wid=23",
+          "year": "2026/27"
+        },
+        {
+          "label": "現行IAL路線",
+          "url": "https://www.yingwa.edu.hk/index.php?s=2_42"
+        }
+      ],
+      "verifiedAt": "2026-10-17",
+      "added": false
+    },
+    {
+      "id": "stmargaret",
+      "name": "聖瑪加利男女英文中小學小學部",
+      "en": "St Margaret Co educational English Primary 聖馬加利英文小學 聖瑪加利",
+      "region": "九龍",
+      "district": "深水埗區",
+      "type": "直資",
+      "gender": "男女",
+      "address": "深水埗深旺道33號（南昌站附近）",
+      "primaryCurriculum": "本地及校本課程",
+      "primaryYears": "P1–P6（6年小學）",
+      "pyp": false,
+      "language": "英文為主，中文相關科目按校本安排",
+      "languageMode": "英文為主",
+      "relation": "through",
+      "relationLabel": "一條龍",
+      "secondaries": [
+        {
+          "name": "聖瑪加利男女英文中小學中學部",
+          "type": "直資",
+          "gender": "男女",
+          "junior": "本地初中",
+          "myp": false,
+          "senior": "DSE 為主，另加修 IAL 補充課程",
+          "programmes": [
+            "DSE",
+            "IAL補充"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 53570,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "P1–6：HK$53,570，分10期。",
+        "note": "",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "IAL 為補充課程，不等同完整獨立的 A-Level 替代路線。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=281",
+          "year": "2026/27"
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://smcesps.edu.hk/en/?p=ks3"
+        },
+        {
+          "label": "小學學費",
+          "url": "https://www.smcesps.edu.hk/en/file/doc/admin_school_Fee_2026-2027.pdf",
+          "year": "2026/27"
+        }
+      ],
+      "verifiedAt": "2026-10-11",
+      "added": false
+    },
+    {
+      "id": "alliance",
+      "name": "九龍塘宣道小學",
+      "en": "Alliance Primary School Kowloon Tong APS",
+      "region": "九龍",
+      "district": "九龍城區",
+      "type": "私立",
+      "gender": "男女",
+      "address": "九龍塘蘭開夏道2號",
+      "primaryCurriculum": "本地課程及校本延伸",
+      "primaryYears": "P1–P6（6年小學）",
+      "pyp": false,
+      "language": "中文（含普通話）及英文",
+      "languageMode": "中英雙語",
+      "relation": "none",
+      "relationLabel": "沒有正式銜接",
+      "secondaries": [],
+      "fee": {
+        "p1": 64250,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "全年HK$64,250，分10期；概覽未另列年級差異。",
+        "note": "",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "升中須另行申請；不適用指沒有指定銜接中學，不代表不能入讀 IB 中學。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=89",
+          "year": "2026/27"
+        }
+      ],
+      "verifiedAt": "2026-10-11",
+      "added": false
+    },
+    {
+      "id": "puiching",
+      "name": "香港培正小學",
+      "en": "Pui Ching Primary",
+      "region": "九龍",
+      "district": "九龍城區",
+      "type": "私立",
+      "gender": "男女",
+      "address": "九龍窩打老道80號",
+      "primaryCurriculum": "本地及校本課程",
+      "primaryYears": "P1–P6（6年小學）",
+      "pyp": false,
+      "language": "中文為主，英文科以英文教授",
+      "languageMode": "中文為主",
+      "relation": "direct",
+      "relationLabel": "直屬",
+      "secondaries": [
+        {
+          "name": "香港培正中學",
+          "type": "資助",
+          "gender": "男女",
+          "junior": "本地初中",
+          "myp": false,
+          "senior": "DSE",
+          "programmes": [
+            "DSE"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 69500,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "全年HK$69,500；概覽未另列年級差異。",
+        "note": "",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "小學為私立，中學為資助；直屬安排不等同正式一條龍。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=79",
+          "year": "2026/27"
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://www.chsc.hk/ssp2025/sch_detail.php?lang_id=3&sch_id=379"
+        }
+      ],
+      "verifiedAt": "2026-10-11",
+      "added": false
+    },
+    {
+      "id": "creative",
+      "name": "啟思小學",
+      "en": "Creative Primary School CPS",
+      "region": "九龍",
+      "district": "九龍城區",
+      "type": "私立",
+      "gender": "男女",
+      "address": "九龍塘牛津道2號A",
+      "primaryCurriculum": "本地內容結合正式 IB PYP",
+      "primaryYears": "P1–P6（6年小學）",
+      "pyp": true,
+      "language": "中文及英文；中文科按安排以普通話或粵語教授",
+      "languageMode": "中英雙語",
+      "relation": "priority",
+      "relationLabel": "同系優先面試／評核",
+      "secondaries": [
+        {
+          "name": "啟思中學",
+          "type": "直資",
+          "gender": "男女",
+          "junior": "IB MYP",
+          "myp": true,
+          "senior": "DSE 或 IBDP",
+          "programmes": [
+            "MYP",
+            "IBDP",
+            "DSE"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 151580,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "P1–3：HK$151,580；P4–6：HK$154,880，分11期。",
+        "note": "",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "同系優先面試／評核不是保證直升。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=3&sch_id=111",
+          "year": "2026/27"
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://www.css.edu.hk/_files/ugd/611a22_0df9f510b8a044039ac24c0ba5c493c6.pdf"
+        },
+        {
+          "label": "補充官方資料",
+          "url": "https://www.css.edu.hk/_files/ugd/611a22_47c1b77c1fa34c2cbdb124112269f927.pdf"
+        },
+        {
+          "label": "小學學費",
+          "url": "https://www.creativeprisch.edu.hk/%E5%AD%B8%E6%A0%A1%E8%B3%87%E6%96%99?lang=en",
+          "year": "2026/27"
+        }
+      ],
+      "verifiedAt": "2026-10-11",
+      "added": false
+    },
+    {
+      "id": "sscps",
+      "name": "聖士提反書院附屬小學",
+      "en": "St Stephens College Preparatory School",
+      "region": "香港島",
+      "district": "南區",
+      "type": "私立",
+      "gender": "男女",
+      "address": "赤柱黃麻角道30–32號",
+      "primaryCurriculum": "本地及校本課程",
+      "primaryYears": "P1–P6（6年小學）",
+      "pyp": false,
+      "language": "英文為主，中文及文化科以普通話教授",
+      "languageMode": "英文為主",
+      "relation": "direct",
+      "relationLabel": "直屬",
+      "secondaries": [
+        {
+          "name": "聖士提反書院",
+          "type": "直資",
+          "gender": "男女",
+          "junior": "本地初中",
+          "myp": false,
+          "senior": "DSE 或 IBDP",
+          "programmes": [
+            "IBDP",
+            "DSE"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 97150,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "全年HK$97,150；概覽未另列年級差異。",
+        "note": "",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "直屬中學有 IBDP，但須另留意升中及 IB 分流條件。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=252",
+          "year": "2026/27"
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://www.ssc.edu.hk/en/site/view?name=Studying+at+SSC"
+        },
+        {
+          "label": "小學學費",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=1&sch_id=252",
+          "year": "2026/27"
+        }
+      ],
+      "verifiedAt": "2026-10-11",
+      "added": false
+    },
+    {
+      "id": "vsa",
+      "name": "滬江維多利亞學校小學部（VSA）",
+      "en": "Victoria Shanghai Academy VSA",
+      "region": "香港島",
+      "district": "南區",
+      "type": "私立獨立",
+      "gender": "男女",
+      "address": "黃竹坑深灣道19號",
+      "primaryCurriculum": "正式 IB PYP",
+      "primaryYears": "Y1–Y5（5個校內學年）",
+      "pyp": true,
+      "language": "英文及普通話雙語",
+      "languageMode": "中英雙語",
+      "relation": "continuous",
+      "relationLabel": "同校一貫／銜接",
+      "secondaries": [
+        {
+          "name": "滬江維多利亞學校中學部（VSA）",
+          "type": "私立獨立",
+          "gender": "男女",
+          "junior": "IB MYP",
+          "myp": true,
+          "senior": "IBDP",
+          "programmes": [
+            "MYP",
+            "IBDP"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 191700,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "小學Y1–5：HK$191,700，分10期。",
+        "note": "Y6已屬MYP收費帶HK$212,300。",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "另列的私立獨立學校選項，供按接受範圍比較。",
+        "保留作私立獨立學校選項，與一般本地直資／私立學校分列。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://www.vsa.edu.hk/about/vision-and-mission",
+          "year": null
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://www.vsa.edu.hk/"
+        },
+        {
+          "label": "小學學費",
+          "url": "https://www.vsa.edu.hk/admissions/school-fees",
+          "year": "2026/27"
+        }
+      ],
+      "verifiedAt": "2026-10-11",
+      "added": false
+    },
+    {
+      "id": "isf",
+      "name": "弘立書院小學部（ISF）",
+      "en": "Independent Schools Foundation ISF",
+      "region": "香港島",
+      "district": "南區",
+      "type": "私立獨立",
+      "gender": "男女",
+      "address": "薄扶林鋼綫灣道1號",
+      "primaryCurriculum": "自訂雙語沉浸課程",
+      "primaryYears": "預備班FY及G1–G5（共6個學年）",
+      "pyp": false,
+      "language": "普通話及英文；FY–G2 約70%／30%，G4–5 約各半",
+      "languageMode": "中英雙語",
+      "relation": "continuous",
+      "relationLabel": "同校一貫／銜接",
+      "secondaries": [
+        {
+          "name": "弘立書院中學部（ISF）",
+          "type": "私立獨立",
+          "gender": "男女",
+          "junior": "G6–10 IB MYP",
+          "myp": true,
+          "senior": "G11–12 IBDP",
+          "programmes": [
+            "MYP",
+            "IBDP"
+          ]
+        }
+      ],
+      "fee": {
+        "p1": 251130,
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "bands": "FY–G5：HK$251,130，分10期。",
+        "note": "小學含預備班FY。",
+        "verifiedAt": "2026-10-17"
+      },
+      "notes": [
+        "另列的私立獨立學校選項。小學不是 PYP，初中才開始 MYP。",
+        "保留作私立獨立學校選項，小學自訂課程並非PYP。"
+      ],
+      "sources": [
+        {
+          "label": "小學官方概覽／資料",
+          "url": "https://applications.edb.gov.hk/schoolsearch/schoolinfo.aspx?langno=1&scrn=553190000323&type=",
+          "year": null
+        },
+        {
+          "label": "中學課程／升中安排",
+          "url": "https://academy.isf.edu.hk/index.php/learning/putonghua-and-english-mastery/"
+        },
+        {
+          "label": "小學學費",
+          "url": "https://academy.isf.edu.hk/index.php/welcome-from-dean-of-admissions/fees-tuition/",
+          "year": "2026/27"
+        }
+      ],
+      "verifiedAt": "2026-10-11",
+      "added": false
+    },
+    {
+      "region": "香港島",
+      "primaryYears": "P1–P6（6年小學）",
+      "primaryCurriculum": "本地及校本課程",
+      "pyp": null,
+      "session": "全日",
+      "notes": [
+        "直屬聖保羅書院，不是正式一條龍，也不是聖保羅男女中學附屬小學。",
+        "聖保羅書院不參加中一統一派位；現行校內升中成績、操行及名額保證條件須向校方確認。中學提供DSE及IAL，未列IBDP。"
+      ],
+      "sources": [
+        {
+          "label": "小學概覽",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=2",
+          "year": "2026/27"
+        },
+        {
+          "label": "小學課程及教學語言",
+          "url": "https://www.spc-ps.edu.hk/page.php?id=69&lang=tchi&mid=86"
+        },
+        {
+          "label": "聖保羅書院概覽",
+          "url": "https://www.chsc.hk/ssp2025/sch_detail.php?lang_id=2&sch_id=276",
+          "year": "2025/26（含2026/27科目表）"
+        },
+        {
+          "label": "教育局收費證明書",
+          "url": "https://applications.edb.gov.hk/schoolsearch/schoolfee/170070.pdf"
+        }
+      ],
+      "verifiedAt": "2026-10-17",
+      "added": true,
+      "id": "spcps",
+      "name": "聖保羅書院小學",
+      "en": "St. Paul's College Primary School 聖保羅小學 SPCPS",
+      "type": "直資",
+      "gender": "男",
+      "district": "南區",
+      "address": "香港域多利道777號",
+      "languageMode": "中英雙語",
+      "language": "中文（包括普通話）及英文。部分學科循序增加英語；中文科小四起以普通話授課，小一至三中文科主要口語未明列。",
+      "relation": "direct",
+      "secondaries": [
+        {
+          "name": "聖保羅書院",
+          "type": "直資",
+          "gender": "男",
+          "junior": "本地／校本初中課程",
+          "myp": null,
+          "senior": "HKDSE 或 IAL",
+          "programmes": [
+            "DSE",
+            "A-Level"
+          ]
+        }
+      ],
+      "fee": {
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "verifiedAt": "2026-10-17",
+        "bands": "P1–P6：HK$32,000，分10期。",
+        "note": "",
+        "p1": 32000
+      },
+      "relationLabel": "直屬"
+    },
+    {
+      "region": "香港島",
+      "primaryYears": "P1–P6（6年小學）",
+      "primaryCurriculum": "本地及校本課程",
+      "pyp": null,
+      "session": "全日",
+      "notes": [
+        "直屬資助中學，按保留學額及派位條件處理，不是無條件一條龍。"
+      ],
+      "sources": [
+        {
+          "label": "小學概覽",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=409",
+          "year": "2026/27"
+        },
+        {
+          "label": "小學中文科教學語言",
+          "url": "https://rcps.raimondi.edu.hk/wordpress/curriculum/%E4%B8%AD%E6%96%87%E7%A7%91/"
+        },
+        {
+          "label": "中學課程",
+          "url": "https://www.raimondi.edu.hk/en/school-curriculum"
+        },
+        {
+          "label": "高主教書院概覽",
+          "url": "https://www.chsc.hk/ssp2025/sch_detail.php?lang_id=2&sch_id=116",
+          "year": "2025/26（含2026/27科目表）"
+        },
+        {
+          "label": "教育局收費證明書",
+          "url": "https://applications.edb.gov.hk/schoolsearch/schoolfee/575240.pdf"
+        }
+      ],
+      "verifiedAt": "2026-10-17",
+      "added": true,
+      "id": "raimondi",
+      "name": "高主教書院小學部",
+      "en": "Raimondi College Primary Section RCPS",
+      "type": "私立",
+      "gender": "男女",
+      "district": "灣仔區",
+      "address": "香港灣仔司徒拔道肇輝臺1號E",
+      "languageMode": "中英雙語",
+      "language": "中文（包括普通話）及英文。小一至小六中文科均以普通話教學；最新各科英語課時比例未核實，不沿用舊單張的70%。",
+      "relation": "direct",
+      "secondaries": [
+        {
+          "name": "高主教書院",
+          "type": "資助",
+          "gender": "男女",
+          "junior": "本地／校本初中課程",
+          "myp": null,
+          "senior": "HKDSE",
+          "programmes": [
+            "DSE"
+          ]
+        }
+      ],
+      "fee": {
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "verifiedAt": "2026-10-17",
+        "bands": "P1–P6：HK$60,000，分10期。",
+        "note": "",
+        "p1": 60000
+      },
+      "relationLabel": "直屬"
+    },
+    {
+      "region": "香港島",
+      "primaryYears": "P1–P6（6年小學）",
+      "primaryCurriculum": "本地及校本課程",
+      "pyp": null,
+      "session": "全日",
+      "notes": [
+        "官方概覽列聯繫匯基書院（東九龍），不是一條龍。匯基不參加統一派位，不應直接套用派位聯繫學校25%機制。",
+        "舊概覽曾列約30學額，2026版未列此數字；現行名額及取錄條件須向校方確認。IGCSE中文屬特定學生安排，不當作完整IGCSE路線。"
+      ],
+      "sources": [
+        {
+          "label": "小學概覽",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=19",
+          "year": "2026/27"
+        },
+        {
+          "label": "小學官方資料",
+          "url": "https://www.kauyan.edu.hk/primary/"
+        },
+        {
+          "label": "匯基非本地IAL課程",
+          "url": "https://www.uccke.edu.hk/learning-and-teaching/non-local-curriculum-nlc/"
+        },
+        {
+          "label": "中學插班課程安排",
+          "url": "https://www.uccke.edu.hk/admission/admission-s-2-s-5/"
+        },
+        {
+          "label": "教育局收費證明書",
+          "url": "https://applications.edb.gov.hk/schoolsearch/schoolfee/512273.pdf"
+        }
+      ],
+      "verifiedAt": "2026-10-17",
+      "added": true,
+      "id": "kauyan",
+      "name": "救恩學校",
+      "en": "Kau Yan School",
+      "type": "私立",
+      "gender": "男女",
+      "district": "中西區",
+      "address": "香港西營盤高街97B號（教育局註冊處所：97A及97B號）",
+      "languageMode": "中文為主",
+      "language": "概覽列中文（包括普通話），設英文科。現行中文科分級普粵安排及其他科目英語比例未核實。",
+      "relation": "linked",
+      "secondaries": [
+        {
+          "name": "匯基書院（東九龍）",
+          "type": "直資",
+          "gender": "男女",
+          "junior": "本地／校本初中課程",
+          "myp": null,
+          "senior": "HKDSE 或非本地GCE IAL課程",
+          "programmes": [
+            "DSE",
+            "A-Level"
+          ]
+        }
+      ],
+      "fee": {
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "verifiedAt": "2026-10-17",
+        "bands": "P1–P6：HK$75,550，分10期。",
+        "note": "",
+        "p1": 75550
+      },
+      "relationLabel": "聯繫"
+    },
+    {
+      "region": "香港島",
+      "primaryYears": "P1–P6（6年小學）",
+      "primaryCurriculum": "本地及校本課程",
+      "pyp": null,
+      "session": "全日",
+      "notes": [
+        "概覽的一條龍、直屬及聯繫欄全為「-」。同團體不等於正式升中關係，優先面試或保證錄取安排未核實。",
+        "蘇浙公學國際部另有IGCSE及IBDP，並非本地小學保證銜接路線，本表的中學課程篩選不把該國際部算入。"
+      ],
+      "sources": [
+        {
+          "label": "小學概覽",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=53",
+          "year": "2026/27"
+        },
+        {
+          "label": "本地及國際部分別",
+          "url": "https://www.kcs.edu.hk/schoolinfo.html"
+        },
+        {
+          "label": "小學教與學特色",
+          "url": "https://www.kcs.edu.hk/character.htm"
+        },
+        {
+          "label": "蘇浙公學（同辦學團體本地部，須另行申請）概覽",
+          "url": "https://www.chsc.hk/ssp2025/sch_detail.php?lang_id=2&sch_id=329",
+          "year": "2025/26（含2026/27科目表）"
+        },
+        {
+          "label": "教育局收費證明書",
+          "url": "https://applications.edb.gov.hk/schoolsearch/schoolfee/132730.pdf"
+        }
+      ],
+      "verifiedAt": "2026-10-17",
+      "added": true,
+      "id": "kcs-local",
+      "name": "蘇浙小學校（本地部）",
+      "en": "Kiangsu & Chekiang Primary School 蘇浙小學",
+      "type": "私立",
+      "gender": "男女",
+      "district": "東區",
+      "address": "香港北角清華街30號",
+      "languageMode": "中英雙語",
+      "language": "中文（普通話）及英文。中文以普通話教授，英文科用英語；本表只收錄本地／主流部。",
+      "relation": "none",
+      "secondaries": [
+        {
+          "name": "蘇浙公學（同辦學團體本地部，須另行申請）",
+          "type": "直資",
+          "gender": "男女",
+          "junior": "本地／校本初中課程",
+          "myp": null,
+          "senior": "本地直資部HKDSE",
+          "programmes": [
+            "DSE"
+          ]
+        }
+      ],
+      "fee": {
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "verifiedAt": "2026-10-17",
+        "bands": "本地部P1–P6：HK$58,000，分10期。",
+        "note": "不混用國際部收費。",
+        "p1": 58000
+      },
+      "relationLabel": "沒有正式銜接"
+    },
+    {
+      "region": "香港島",
+      "primaryYears": "P1–P6（6年小學）",
+      "primaryCurriculum": "本地及校本課程",
+      "pyp": null,
+      "session": "全日",
+      "notes": [
+        "直屬資助中學的保留學額須符合派位條件，並非所有小六學生保證入讀。",
+        "官方課程資料未列PYP、MYP、IBDP或完整A-Level路線；中學以已核實DSE主線展示。"
+      ],
+      "sources": [
+        {
+          "label": "小學概覽",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=424",
+          "year": "2026/27"
+        },
+        {
+          "label": "教育局免費小學教育",
+          "url": "https://www.edb.gov.hk/en/edu-system/primary-secondary/primary/"
+        },
+        {
+          "label": "聖若瑟書院概覽",
+          "url": "https://www.chsc.hk/ssp2025/sch_detail.php?lang_id=2&sch_id=309",
+          "year": "2025/26（含2026/27科目表）"
+        }
+      ],
+      "verifiedAt": "2026-10-17",
+      "added": true,
+      "id": "stjoseph",
+      "name": "聖若瑟小學",
+      "en": "St. Joseph's Primary School",
+      "type": "資助",
+      "gender": "男",
+      "district": "灣仔區",
+      "address": "香港灣仔活道48號",
+      "schoolNet": "12",
+      "languageMode": "英文為主",
+      "language": "概覽列英文為教學語言。中文科各級粵語／普通話安排未核實。",
+      "relation": "direct",
+      "secondaries": [
+        {
+          "name": "聖若瑟書院",
+          "type": "資助",
+          "gender": "男",
+          "junior": "本地／校本初中課程",
+          "myp": null,
+          "senior": "HKDSE",
+          "programmes": [
+            "DSE"
+          ]
+        }
+      ],
+      "misc": "概覽另列家教會HK$160、非標準項目HK$470。",
+      "fee": {
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "verifiedAt": "2026-10-17",
+        "bands": "P1–P6公營小學免學費。",
+        "note": "免學費不代表零開支，校車、午膳、家教會及其他核准收費另計。 概覽另列家教會HK$160、非標準項目HK$470。",
+        "p1": 0
+      },
+      "relationLabel": "直屬"
+    },
+    {
+      "region": "香港島",
+      "primaryYears": "P1–P6（6年小學）",
+      "primaryCurriculum": "本地及校本課程",
+      "pyp": null,
+      "session": "全日",
+      "notes": [
+        "直屬資助中學的保留學額須符合派位條件，並非所有小六學生保證入讀。",
+        "小學在北角，直屬的是香港華仁書院，不是九龍華仁書院。",
+        "官方課程資料未列PYP、MYP、IBDP或完整A-Level路線；中學以已核實DSE主線展示。"
+      ],
+      "sources": [
+        {
+          "label": "小學概覽",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=416",
+          "year": "2026/27"
+        },
+        {
+          "label": "教育局免費小學教育",
+          "url": "https://www.edb.gov.hk/en/edu-system/primary-secondary/primary/"
+        },
+        {
+          "label": "香港華仁書院概覽",
+          "url": "https://www.chsc.hk/ssp2025/sch_detail.php?lang_id=2&sch_id=372",
+          "year": "2025/26（含2026/27科目表）"
+        }
+      ],
+      "verifiedAt": "2026-10-17",
+      "added": true,
+      "id": "wahyan",
+      "name": "番禺會所華仁小學",
+      "en": "Pun U Association Wah Yan Primary School",
+      "type": "資助",
+      "gender": "男",
+      "district": "東區",
+      "address": "香港北角百福道2號",
+      "schoolNet": "14",
+      "languageMode": "中文為主",
+      "language": "概覽列中文。中文科各級粵語／普通話安排未核實。",
+      "relation": "direct",
+      "secondaries": [
+        {
+          "name": "香港華仁書院",
+          "type": "資助",
+          "gender": "男",
+          "junior": "本地／校本初中課程",
+          "myp": null,
+          "senior": "HKDSE",
+          "programmes": [
+            "DSE"
+          ]
+        }
+      ],
+      "misc": "概覽另列家教會HK$100（自由參與）、非標準項目HK$470。",
+      "fee": {
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "verifiedAt": "2026-10-17",
+        "bands": "P1–P6公營小學免學費。",
+        "note": "免學費不代表零開支，校車、午膳、家教會及其他核准收費另計。 概覽另列家教會HK$100（自由參與）、非標準項目HK$470。",
+        "p1": 0
+      },
+      "relationLabel": "直屬"
+    },
+    {
+      "region": "香港島",
+      "primaryYears": "P1–P6（6年小學）",
+      "primaryCurriculum": "本地及校本課程",
+      "pyp": null,
+      "session": "全日",
+      "notes": [
+        "官方概覽未列一條龍、直屬或聯繫中學，升中需另行申請／派位。",
+        "官方課程資料未列PYP、MYP、IBDP或完整A-Level路線；中學以已核實DSE主線展示。"
+      ],
+      "sources": [
+        {
+          "label": "小學概覽",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=17",
+          "year": "2026/27"
+        },
+        {
+          "label": "教育局免費小學教育",
+          "url": "https://www.edb.gov.hk/en/edu-system/primary-secondary/primary/"
+        }
+      ],
+      "verifiedAt": "2026-10-17",
+      "added": true,
+      "id": "stpeter",
+      "name": "聖公會聖彼得小學",
+      "en": "S.K.H. St. Peter's Primary School",
+      "type": "資助",
+      "gender": "男女",
+      "district": "中西區",
+      "address": "香港山道70及88號",
+      "schoolNet": "11",
+      "languageMode": "中文為主",
+      "language": "概覽列中文，有英語及普通話學習活動。中文科各級粵語／普通話安排未核實。",
+      "relation": "none",
+      "secondaries": [],
+      "misc": "概覽另列家教會HK$50、非標準項目HK$450，補領學生證HK$40。",
+      "fee": {
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "verifiedAt": "2026-10-17",
+        "bands": "P1–P6公營小學免學費。",
+        "note": "免學費不代表零開支，校車、午膳、家教會及其他核准收費另計。 概覽另列家教會HK$50、非標準項目HK$450，補領學生證HK$40。",
+        "p1": 0
+      },
+      "relationLabel": "沒有正式銜接"
+    },
+    {
+      "region": "香港島",
+      "primaryYears": "P1–P6（6年小學）",
+      "primaryCurriculum": "本地及校本課程",
+      "pyp": null,
+      "session": "全日",
+      "notes": [
+        "聯繫不是保證直升。英皇只收男生，庇理羅士只收女生；另須符合派位條件。",
+        "官方課程資料未列PYP、MYP、IBDP或完整A-Level路線；中學以已核實DSE主線展示。"
+      ],
+      "sources": [
+        {
+          "label": "小學概覽",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=21",
+          "year": "2026/27"
+        },
+        {
+          "label": "教育局免費小學教育",
+          "url": "https://www.edb.gov.hk/en/edu-system/primary-secondary/primary/"
+        },
+        {
+          "label": "英皇書院概覽",
+          "url": "https://www.chsc.hk/ssp2025/sch_detail.php?lang_id=2&sch_id=419",
+          "year": "2025/26（含2026/27科目表）"
+        },
+        {
+          "label": "庇理羅士女子中學概覽",
+          "url": "https://www.chsc.hk/ssp2025/sch_detail.php?lang_id=2&sch_id=27",
+          "year": "2025/26（含2026/27科目表）"
+        },
+        {
+          "label": "金文泰中學概覽",
+          "url": "https://www.chsc.hk/ssp2025/sch_detail.php?lang_id=2&sch_id=160",
+          "year": "2025/26（含2026/27科目表）"
+        },
+        {
+          "label": "鄧肇堅維多利亞官立中學概覽",
+          "url": "https://www.chsc.hk/ssp2025/sch_detail.php?lang_id=2&sch_id=55",
+          "year": "2025/26（含2026/27科目表）"
+        }
+      ],
+      "verifiedAt": "2026-10-17",
+      "added": true,
+      "id": "bonham",
+      "name": "般咸道官立小學",
+      "en": "Bonham Road Government Primary School",
+      "type": "官立",
+      "gender": "男女",
+      "district": "中西區",
+      "address": "香港西營盤般咸道9A號",
+      "schoolNet": "11",
+      "languageMode": "中文為主",
+      "language": "概覽列中文。中文科各級粵語／普通話安排未核實。",
+      "relation": "linked",
+      "secondaries": [
+        {
+          "name": "英皇書院",
+          "type": "官立",
+          "gender": "男",
+          "junior": "本地／校本初中課程",
+          "myp": null,
+          "senior": "HKDSE",
+          "programmes": [
+            "DSE"
+          ]
+        },
+        {
+          "name": "庇理羅士女子中學",
+          "type": "官立",
+          "gender": "女",
+          "junior": "本地／校本初中課程",
+          "myp": null,
+          "senior": "HKDSE",
+          "programmes": [
+            "DSE"
+          ]
+        },
+        {
+          "name": "金文泰中學",
+          "type": "官立",
+          "gender": "男女",
+          "junior": "本地／校本初中課程",
+          "myp": null,
+          "senior": "HKDSE",
+          "programmes": [
+            "DSE"
+          ]
+        },
+        {
+          "name": "鄧肇堅維多利亞官立中學",
+          "type": "官立",
+          "gender": "男女",
+          "junior": "本地／校本初中課程",
+          "myp": null,
+          "senior": "HKDSE及應用學習",
+          "programmes": [
+            "DSE"
+          ]
+        }
+      ],
+      "misc": "概覽另列家教會HK$70、非標準項目HK$300。",
+      "fee": {
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "verifiedAt": "2026-10-17",
+        "bands": "P1–P6公營小學免學費。",
+        "note": "免學費不代表零開支，校車、午膳、家教會及其他核准收費另計。 概覽另列家教會HK$70、非標準項目HK$300。",
+        "p1": 0
+      },
+      "relationLabel": "聯繫"
+    },
+    {
+      "region": "香港島",
+      "primaryYears": "P1–P6（6年小學）",
+      "primaryCurriculum": "本地及校本課程",
+      "pyp": null,
+      "session": "全日",
+      "notes": [
+        "聯繫不是保證直升。皇仁只收男生，庇理羅士及何東只收女生；另須符合派位條件。",
+        "與軒尼詩道官立小學的另一校區分開看，本記錄只指銅鑼灣東院道3號學校。",
+        "官方課程資料未列PYP、MYP、IBDP或完整A-Level路線；中學以已核實DSE主線展示。"
+      ],
+      "sources": [
+        {
+          "label": "小學概覽",
+          "url": "https://www.chsc.hk/psp2026/sch_detail.php?lang_id=2&sch_id=422",
+          "year": "2026/27"
+        },
+        {
+          "label": "教育局免費小學教育",
+          "url": "https://www.edb.gov.hk/en/edu-system/primary-secondary/primary/"
+        },
+        {
+          "label": "皇仁書院概覽",
+          "url": "https://www.chsc.hk/ssp2025/sch_detail.php?lang_id=2&sch_id=128",
+          "year": "2025/26（含2026/27科目表）"
+        },
+        {
+          "label": "庇理羅士女子中學概覽",
+          "url": "https://www.chsc.hk/ssp2025/sch_detail.php?lang_id=2&sch_id=27",
+          "year": "2025/26（含2026/27科目表）"
+        },
+        {
+          "label": "何東中學概覽",
+          "url": "https://www.chsc.hk/ssp2025/sch_detail.php?lang_id=2&sch_id=122",
+          "year": "2025/26（含2026/27科目表）"
+        },
+        {
+          "label": "金文泰中學概覽",
+          "url": "https://www.chsc.hk/ssp2025/sch_detail.php?lang_id=2&sch_id=160",
+          "year": "2025/26（含2026/27科目表）"
+        },
+        {
+          "label": "鄧肇堅維多利亞官立中學概覽",
+          "url": "https://www.chsc.hk/ssp2025/sch_detail.php?lang_id=2&sch_id=55",
+          "year": "2025/26（含2026/27科目表）"
+        }
+      ],
+      "verifiedAt": "2026-10-17",
+      "added": true,
+      "id": "hennessy-cwb",
+      "name": "軒尼詩道官立小學（銅鑼灣）",
+      "en": "Hennessy Road Government Primary School Causeway Bay",
+      "type": "官立",
+      "gender": "男女",
+      "district": "灣仔區",
+      "address": "香港銅鑼灣東院道3號",
+      "schoolNet": "12",
+      "languageMode": "中文為主",
+      "language": "概覽列中文。中文科各級粵語／普通話安排未核實。",
+      "relation": "linked",
+      "secondaries": [
+        {
+          "name": "皇仁書院",
+          "type": "官立",
+          "gender": "男",
+          "junior": "本地／校本初中課程",
+          "myp": null,
+          "senior": "HKDSE",
+          "programmes": [
+            "DSE"
+          ]
+        },
+        {
+          "name": "庇理羅士女子中學",
+          "type": "官立",
+          "gender": "女",
+          "junior": "本地／校本初中課程",
+          "myp": null,
+          "senior": "HKDSE",
+          "programmes": [
+            "DSE"
+          ]
+        },
+        {
+          "name": "何東中學",
+          "type": "官立",
+          "gender": "女",
+          "junior": "本地／校本初中課程",
+          "myp": null,
+          "senior": "HKDSE",
+          "programmes": [
+            "DSE"
+          ]
+        },
+        {
+          "name": "金文泰中學",
+          "type": "官立",
+          "gender": "男女",
+          "junior": "本地／校本初中課程",
+          "myp": null,
+          "senior": "HKDSE",
+          "programmes": [
+            "DSE"
+          ]
+        },
+        {
+          "name": "鄧肇堅維多利亞官立中學",
+          "type": "官立",
+          "gender": "男女",
+          "junior": "本地／校本初中課程",
+          "myp": null,
+          "senior": "HKDSE及應用學習",
+          "programmes": [
+            "DSE"
+          ]
+        }
+      ],
+      "fee": {
+        "year": "2026/27",
+        "yearConfirmed": true,
+        "verifiedAt": "2026-10-17",
+        "bands": "P1–P6公營小學免學費。",
+        "note": "免學費不代表零開支，校車、午膳、家教會及其他核准收費另計。",
+        "p1": 0
+      },
+      "relationLabel": "聯繫"
+    }
+  ]
+}
