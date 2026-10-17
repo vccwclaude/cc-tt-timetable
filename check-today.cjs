@@ -18,3 +18,7 @@ assert.equal(vm.runInNewContext(expression, {
   isToday:false, key:'other', isSel:false, isInDragRange:false, dropTarget:null
 }), '2px solid transparent');
 console.log('Today retains its red border across selection and drag states.');
+assert.equal(vm.runInNewContext(expression, {
+  isToday:false, key:'other', isSel:true, isInDragRange:false, dropTarget:null
+}), '2px solid #0984E3');
+console.log('Other selected dates have a blue border; deselected dates have none.');
