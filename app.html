@@ -550,7 +550,7 @@ function CCCalendar() {
   const [loadStatus, setLoadStatus] = useState("loading");
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [copiedEvent, setCopiedEvent] = useState(null);
-  const [shortcutMessage, setShortcutMessage] = useState("Click an event to select it. Double-click to edit. Ctrl+C to copy, then select a date and press Ctrl+V.");
+  const [shortcutMessage, setShortcutMessage] = useState("");
   const [dragInfo, setDragInfo] = useState(null);
   const [dropTarget, setDropTarget] = useState(null);
   const [editInfo, setEditInfo] = useState(null);
@@ -775,7 +775,7 @@ function CCCalendar() {
             {saveStatus === "saving" ? "⏳ Saving..." : saveStatus === "saved" ? "✓ Synced!" : saveStatus === "error" ? "✕ Error" : hasUnsaved ? "☁️ Save to Cloud" : "☁️ Synced"}
           </button>
         </div>
-        <div style={{ textAlign:"center", fontSize:11, fontWeight:600, color:"#636E72", margin:"-10px 0 16px" }}>{shortcutMessage}</div>
+        {shortcutMessage && <div style={{ textAlign:"center", fontSize:11, fontWeight:600, color:"#636E72", margin:"-10px 0 16px" }}>{shortcutMessage}</div>}
 
         <div className="month-btns" style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:8, marginBottom:24 }}>
           {MONTHS.map((m, i) => !isMonthFullyPast(m) && (
