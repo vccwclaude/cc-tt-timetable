@@ -326,6 +326,32 @@ function summarizeUpdates(events) {
   });
 }
 
+function eventTitleEmoji(title = "") {
+  const matches = [
+    [/\bpiano\b|鋼琴|钢琴/i, "🎹"],
+    [/\bviolin\b|小提琴/i, "🎻"],
+    [/\b(swim\w*|pool)\b|游泳/i, "🏊"],
+    [/\b(taekwondo|karate|judo)\b|跆拳道|空手道|柔道/i, "🥋"],
+    [/\b(ballet|dance|dancing)\b|芭蕾|跳舞|舞蹈/i, "🩰"],
+    [/\b(singing|choir|music)\b|唱歌|合唱|音樂|音乐/i, "🎵"],
+    [/\b(birthday|bday)\b|生日/i, "🎂"],
+    [/\b(ocean park|disney\w*|theme park)\b|海洋公園|迪士尼/i, "🎢"],
+    [/\b(test|exam\w*|quiz)\b|測驗|测验|考試|考试/i, "📝"],
+    [/\b(reading|book\w*|library)\b|閱讀|阅读|圖書|图书/i, "📚"],
+    [/\b(interview)\b|面試|面试/i, "💬"],
+    [/\b(doctor|dentist|checkup|check\s*up|eye check|injection|vaccin\w*|psychiatrist)\b|醫生|医生|牙醫|檢查|检查|打針/i, "🩺"],
+    [/\b(holiday\w*|holi|vacation)\b|假期|放假/i, "🏖️"],
+    [/\b(trip|travel|flight|phuket|fukuoka)\b|旅行|旅遊|旅游|布吉|福岡/i, "✈️"],
+    [/\b(art|drawing|painting)\b|畫畫|绘画|美術|美术/i, "🎨"],
+    [/\b(football|soccer)\b|足球/i, "⚽"],
+    [/\bbasketball\b|籃球|篮球/i, "🏀"],
+    [/\b(picnic|lunch|dinner|cooking|baking|mochi)\b|野餐|晚餐|午餐|烹飪|烘焙/i, "🍽️"],
+    [/\b(party|celebration)\b|派對|派对|慶祝/i, "🎉"],
+    [/\b(class|lesson|school)\b|上課|上课|學校|学校/i, "🏫"]
+  ];
+  return matches.find(([pattern]) => pattern.test(title))?.[1] || "📌";
+}
+
 function LatestUpdates({ events }) {
   const recent = summarizeUpdates(events);
   return (
@@ -335,7 +361,7 @@ function LatestUpdates({ events }) {
         ? <p style={{ margin:0, color:"#636E72", fontSize:13 }}>New and edited events will appear here after your next calendar update.</p>
         : <ul style={{ listStyle:"none", padding:0, margin:0 }}>
           {recent.map((event, index) => <li key={event.date + "-" + index} style={{ padding:"10px 0", borderTop:"1px solid #e9eeee", overflowWrap:"anywhere" }}>
-            <strong style={{ display:"block", fontSize:14, color:"#2D3436" }}>{event.label}</strong>
+            <strong style={{ display:"block", fontSize:14, color:"#2D3436" }}><span aria-hidden="true" style={{ fontSize:12, marginRight:5 }}>{eventTitleEmoji(event.label)}</span>{event.label}</strong>
             <span style={{ display:"block", fontSize:12, color:"#636E72" }}>{event.dateSummary}{event.time ? " · " + event.time : ""}</span>
             <small style={{ display:"block", marginTop:4, color:"#636E72" }}>Updated {new Date(event.updatedAt).toLocaleString("en-GB", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" })}</small>
           </li>)}
