@@ -563,6 +563,7 @@ function CCCalendar() {
   const [newTime, setNewTime] = useState("");
   const [newColor, setNewColor] = useState("#2196F3");
   const [rangeDrag, setRangeDrag] = useState(null);
+  const [selectedRange, setSelectedRange] = useState(null);
   const rangeDragged = useRef(false);
   const [recLabel, setRecLabel] = useState("");
   const [recDay, setRecDay] = useState("Monday");
@@ -594,7 +595,7 @@ function CCCalendar() {
       setRangeDrag(null);
       if (!rangeDragged.current) return;
       const [first, last] = [start, end].sort();
-      setNewDate(first); setNewEndDate(last); setSelectedDate(null); setShowAddEvent(true);
+      setSelectedRange({ start:first, end:last }); setSelectedDate(null);
     };
     window.addEventListener("pointerup", finishRange);
     return () => window.removeEventListener("pointerup", finishRange);
@@ -612,8 +613,9 @@ function CCCalendar() {
   const days = getCalendarDays(current.year, current.month);
   const calendarWeeks = buildCalendarWeeks(days, events);
   const selectedKey = selectedDate ? getKey(selectedDate) : null;
-  const rangeFirst = rangeDrag ? [rangeDrag.start, rangeDrag.end].sort()[0] : null;
-  const rangeLast = rangeDrag ? [rangeDrag.start, rangeDrag.end].sort()[1] : null;
+  const activeRange = rangeDrag || selectedRange;
+  const rangeFirst = activeRange ? [activeRange.start, activeRange.end].sort()[0] : null;
+  const rangeLast = activeRange ? [activeRange.start, activeRange.end].sort()[1] : null;
 
   useEffect(() => {
     const isTyping = target => ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName) || target.isContentEditable;
@@ -651,7 +653,7 @@ function CCCalendar() {
     const event = { label:newLabel, time:newTime, color:newColor, ...(rangeId ? { rangeId, rangeStart:dateKeys[0], rangeEnd:dateKeys[dateKeys.length-1] } : {}) };
     dateKeys.forEach(key => { updated[key] = [...(updated[key] || []), event]; });
     updateEvents(updated);
-    setNewLabel(""); setNewDate(""); setNewEndDate(""); setNewTime(""); setNewColor("#2196F3"); setShowAddEvent(false);
+    setNewLabel(""); setNewDate(""); setNewEndDate(""); setNewTime(""); setNewColor("#2196F3"); setShowAddEvent(false); setSelectedRange(null);
   };
   const addRecurring = () => {
     if (!recLabel) return;
@@ -685,7 +687,7 @@ function CCCalendar() {
     updateEvents(updated); setDragInfo(null);
   };
   const handleDragEnd = () => { setDragInfo(null); setDropTarget(null); };
-  const handleRangeStart = (e, dateKey) => { if (e.button !== 0) return; rangeDragged.current = false; setRangeDrag({ start:dateKey, end:dateKey }); };
+  const handleRangeStart = (e, dateKey) => { if (e.button !== 0) return; rangeDragged.current = false; setSelectedRange(null); setRangeDrag({ start:dateKey, end:dateKey }); };
   const handleRangeEnter = (dateKey) => setRangeDrag(current => {
     if (!current) return current;
     if (dateKey !== current.start) rangeDragged.current = true;
@@ -769,7 +771,7 @@ function CCCalendar() {
       <div style={{ maxWidth:1380, margin:"0 auto" }}>
 
         <div className="action-btns" style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:8, marginBottom:20 }}>
-          <button onClick={() => { setNewDate(""); setNewEndDate(""); setShowAddEvent(true); }} style={{ ...btnBase, background:"linear-gradient(135deg, #0984E3, #74B9FF)", color:"#fff", padding:"10px 20px", fontSize:13, boxShadow:"0 3px 10px rgba(9,132,227,0.3)" }}>+ Add Event</button>
+          <button onClick={() => { setNewDate(selectedRange?.start || ""); setNewEndDate(selectedRange?.end || ""); setShowAddEvent(true); }} style={{ ...btnBase, background:"linear-gradient(135deg, #0984E3, #74B9FF)", color:"#fff", padding:"10px 20px", fontSize:13, boxShadow:"0 3px 10px rgba(9,132,227,0.3)" }}>+ Add Event</button>
           <button onClick={() => setShowRecurring(true)} style={{ ...btnBase, background:"linear-gradient(135deg, #00B894, #55EFC4)", color:"#fff", padding:"10px 20px", fontSize:13, boxShadow:"0 3px 10px rgba(0,184,148,0.3)" }}>🔄 Recurring</button>
           <button onClick={saveChanges} style={{ ...btnBase, padding:"10px 20px", fontSize:13, background: hasUnsaved ? "linear-gradient(135deg, #E74C3C, #FF6B6B)" : "linear-gradient(135deg, #B2BEC3, #DFE6E9)", color:"#fff", boxShadow: hasUnsaved ? "0 3px 10px rgba(231,76,60,0.3)" : "none", animation: hasUnsaved ? "pulse 2s infinite" : "none" }}>
             {saveStatus === "saving" ? "⏳ Saving..." : saveStatus === "saved" ? "✓ Synced!" : saveStatus === "error" ? "✕ Error" : hasUnsaved ? "☁️ Save to Cloud" : "☁️ Synced"}
